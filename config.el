@@ -17,15 +17,12 @@
 ;;   presentations or streaming.
 ;; - `doom-unicode-font' -- for unicode glyphs
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-
-(setq doom-font (font-spec :family "Cascadia Code" :size 13 :weight 'normal))
-(setq doom-serif-font (font-spec :family "Overpass" :size 13 :weight 'normal))
-
+;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -35,11 +32,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type `relative)
+(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -78,6 +75,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; beacon mode - highlights cursor during page jumps
 (beacon-mode 1)
 
 ;; custom font sizes for markdown
@@ -90,46 +88,14 @@
  '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
 
-;; (defun dt/org-colors-doom-one ()
-;;   "Enable Doom One colors for Org headers."
-;;   (interactive)
-;;   (dolist
-;;       (face
-;;        '((org-level-1 1.7 "#51afef" ultra-bold)
-;;          (org-level-2 1.6 "#c678dd" extra-bold)
-;;          (org-level-3 1.5 "#98be65" bold)
-;;          (org-level-4 1.4 "#da8548" semi-bold)
-;;          (org-level-5 1.3 "#5699af" normal)
-;;          (org-level-6 1.2 "#a9a1e1" normal)
-;;          (org-level-7 1.1 "#46d9ff" normal)
-;;          (org-level-8 1.0 "#ff6c6b" normal)))
-;;     (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
-;;     (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
-
-;; (defun dt/org-colors-dracula ()
-;;   "Enable Dracula colors for Org headers."
-;;   (interactive)
-;;   (dolist
-;;       (face
-;;        '((org-level-1 1.7 "#8be9fd" ultra-bold)
-;;          (org-level-2 1.6 "#bd93f9" extra-bold)
-;;          (org-level-3 1.5 "#50fa7b" bold)
-;;          (org-level-4 1.4 "#ff79c6" semi-bold)
-;;          (org-level-5 1.3 "#9aedfe" normal)
-;;          (org-level-6 1.2 "#caa9fa" normal)
-;;          (org-level-7 1.1 "#5af78e" normal)
-;;          (org-level-8 1.0 "#ff92d0" normal)))
-;;     (set-face-attribute (nth 0 face) nil :font doom-variable-pitch-font :weight (nth 3 face) :height (nth 1 face) :foreground (nth 2 face)))
-;;     (set-face-attribute 'org-table nil :font doom-font :weight 'normal :height 1.0 :foreground "#bfafdf"))
-
-
+;; org mode font config
 (custom-set-faces!
-  '(outline-1 :weight extra-bold :height 1.25)
-  '(outline-2 :weight bold :height 1.15)
-  '(outline-3 :weight bold :height 1.12)
-  '(outline-4 :weight semi-bold :height 1.09)
-  '(outline-5 :weight semi-bold :height 1.06)
-  '(outline-6 :weight semi-bold :height 1.03)
+  '(outline-1 :weight extra-bold :height 1.8)
+  '(outline-2 :weight bold :height 1.6)
+  '(outline-3 :weight bold :height 1.4)
+  '(outline-4 :weight semi-bold :height 1.2)
+  '(outline-5 :weight semi-bold :height 1.15)
+  '(outline-6 :weight semi-bold :height 1.1)
   '(outline-8 :weight semi-bold)
   '(outline-9 :weight semi-bold))
 
@@ -151,7 +117,5 @@
         (?D . 'all-the-icons-green)
         (?E . 'all-the-icons-blue)))
 
-
-;; Custom dashboard image
-
+;; custom dashboard image
 (setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
