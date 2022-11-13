@@ -51,3 +51,4 @@
 
 (package! beacon)
 (package! org-tree-slide)
+(package! auto-rename-tag)
