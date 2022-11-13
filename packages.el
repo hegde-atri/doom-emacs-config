@@ -50,3 +50,4 @@
 ;(unpin! t)
 
 (package! beacon)
+(package! org-tree-slide)

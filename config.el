@@ -7,7 +7,7 @@
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Atri Hegde"
-      user-mail-address "atri@hegdeatri.com")
+      user-mail-address "iamatrihegde@outlook.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'semi-light)
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'normal)
       doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-tokyo-night)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -78,6 +78,10 @@
 ;; beacon mode - highlights cursor during page jumps
 (beacon-mode 1)
 
+(defun my-web-hook ()
+  (auto-rename-tag-mode t))
+(add-hook 'web-mode 'my-web-hook)
+
 ;; custom font sizes for markdown
 (custom-set-faces
  '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
@@ -106,16 +110,19 @@
 
 
 
-(setq org-ellipsis " ▾ "
-      org-hide-leading-stars t
-      org-priority-highest ?A
-      org-priority-lowest ?E
-      org-priority-faces
-      '((?A . 'all-the-icons-red)
-        (?B . 'all-the-icons-orange)
-        (?C . 'all-the-icons-yellow)
-        (?D . 'all-the-icons-green)
-        (?E . 'all-the-icons-blue)))
+;(setq org-ellipsis " ▾ "
+;      org-hide-leading-stars t
+;      org-priority-highest ?A
+;      org-priority-lowest ?E
+;      org-priority-faces
+;      '((?A . 'all-the-icons-red)
+;        (?B . 'all-the-icons-orange)
+;       (?C . 'all-the-icons-yellow)
+;       (?D . 'all-the-icons-green)
+;        (?E . 'all-the-icons-blue)))
+
+(setq
+    org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿"))
 
 ;; custom dashboard image
 (setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
