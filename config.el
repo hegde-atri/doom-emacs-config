@@ -17,12 +17,15 @@
 ;;   presentations or streaming.
 ;; - `doom-unicode-font' -- for unicode glyphs
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
+
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'normal)
+      doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
+
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'normal)
-      doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -32,7 +35,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tokyo-night)
+(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -74,8 +77,6 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
-;; beacon mode - highlights cursor during page jumps
 (beacon-mode 1)
 
 (defun my-web-hook ()
@@ -103,12 +104,8 @@
   '(outline-8 :weight semi-bold)
   '(outline-9 :weight semi-bold))
 
-
-
 (custom-set-faces!
   '(org-document-title :height 1.2))
-
-
 
 ;(setq org-ellipsis " ▾ "
 ;      org-hide-leading-stars t
@@ -121,8 +118,10 @@
 ;       (?D . 'all-the-icons-green)
 ;        (?E . 'all-the-icons-blue)))
 
-(setq
-    org-superstar-headline-bullets-list '("⁖" "◉" "○" "✸" "✿"))
+(after! org
+  (setq
+        org-ellipsis " ▼ "
+        org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
 
 ;; custom dashboard image
 (setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
