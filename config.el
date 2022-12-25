@@ -124,4 +124,6 @@
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
 
 ;; custom dashboard image
-(setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
+(setq fancy-splash-image "~/.doom.d/splash.png")
+(add-hook! '+doom-dashboard-functions :append
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Powered by Emacs!")))
