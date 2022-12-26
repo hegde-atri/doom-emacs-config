@@ -35,7 +35,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-tokyo-night)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -95,17 +95,17 @@
 
 ;; org mode font config
 (custom-set-faces!
-  '(outline-1 :weight extra-bold :height 1.8)
-  '(outline-2 :weight bold :height 1.6)
-  '(outline-3 :weight bold :height 1.4)
-  '(outline-4 :weight semi-bold :height 1.2)
+  '(outline-1 :weight extra-bold :height 1.7)
+  '(outline-2 :weight bold :height 1.5)
+  '(outline-3 :weight bold :height 1.3)
+  '(outline-4 :weight semi-bold :height 1.25)
   '(outline-5 :weight semi-bold :height 1.15)
   '(outline-6 :weight semi-bold :height 1.1)
   '(outline-8 :weight semi-bold)
   '(outline-9 :weight semi-bold))
 
-(custom-set-faces!
-  '(org-document-title :height 1.2))
+;(custom-set-faces!
+;  '(org-document-title :height 1.2))
 
 ;(setq org-ellipsis " ▾ "
 ;      org-hide-leading-stars t
@@ -119,6 +119,7 @@
 ;        (?E . 'all-the-icons-blue)))
 
 (after! org
+  (setq org-log-done 'time)
   (setq
         org-ellipsis " ▼ "
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
