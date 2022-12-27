@@ -18,7 +18,7 @@
 ;; - `doom-unicode-font' -- for unicode glyphs
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'normal)
+(setq doom-font (font-spec :family "JetBrains Mono" :size 16 :weight 'normal)
       doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
 
 ;; See 'C-h v doom-font' for documentation and more examples of what they
@@ -40,11 +40,6 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -107,22 +102,23 @@
 ;(custom-set-faces!
 ;  '(org-document-title :height 1.2))
 
-;(setq org-ellipsis " ▾ "
-;      org-hide-leading-stars t
-;      org-priority-highest ?A
-;      org-priority-lowest ?E
-;      org-priority-faces
-;      '((?A . 'all-the-icons-red)
-;        (?B . 'all-the-icons-orange)
-;       (?C . 'all-the-icons-yellow)
-;       (?D . 'all-the-icons-green)
-;        (?E . 'all-the-icons-blue)))
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
 
 (after! org
   (setq org-log-done 'time)
   (setq
         org-ellipsis " ▼ "
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
+;; org-roam settings
+;; (after! org-roam
+;;   (setq org-roam-capture-templates
+;;         '(("d" "default" plain
+;;            ""
+;;            )
+;;           )
+;;         ))
 
 ;; custom dashboard image
 (setq fancy-splash-image "~/.doom.d/splash.png")
