@@ -49,5 +49,5 @@
 ;(unpin! t)
 
 
-(package! beacon)
+;; (package! beacon)
 (package! auto-rename-tag)
