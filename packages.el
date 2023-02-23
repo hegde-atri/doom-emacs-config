@@ -51,3 +51,5 @@
 
 ;; (package! beacon)
 (package! auto-rename-tag)
+
+;; (package! autothemer)

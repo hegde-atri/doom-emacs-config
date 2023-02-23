@@ -34,7 +34,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-ir-black)
+(setq doom-theme 'doom-tomorrow-night)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -79,12 +79,12 @@
 ;; custom font sizes for markdown
 (custom-set-faces
  '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
- '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
- '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.8))))
- '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.6))))
- '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
- '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
- '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.3))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.25))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.2))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.1)))))
 
 ;; org mode font config
 (custom-set-faces!
@@ -108,7 +108,15 @@
   (setq org-log-done 'time)
   (setq
         org-ellipsis " ▼ "
+        org-hide-emphasis-markers t
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
+
+;; Replace list hyphen with dot
+ (font-lock-add-keywords 'org-mode
+                         '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+;;
 ;; org-roam settings
 ;; (after! org-roam
 ;;   (setq org-roam-capture-templates
@@ -119,6 +127,6 @@
 ;;         ))
 
 ;; custom dashboard image
-(setq fancy-splash-image "~/.doom.d/splash.png")
+(setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
 (add-hook! '+doom-dashboard-functions :append
   (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Powered by Emacs!")))
