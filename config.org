@@ -1,23 +1,77 @@
+#+title: Doom Emacs Configuration
+#+author: Atri Hegde
+
+
+* User Interface
+
+** Name and Email
+
+#+begin_src emacs-lisp :tangle yes
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
+#+end_src
+
+** Doom fonts
+
+#+begin_src emacs-lisp :tangle yes
+
 (setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'light))
+#+end_src
 
+** Doom theme
+
+#+begin_src emacs-lisp :tangle yes
 (setq doom-theme 'doom-palenight)
+#+end_src
 
+** Doom modeline
+
+#+begin_src emacs-lisp :tangle yes
 (setq doom-modeline-enable-word-count t)
+#+end_src
 
+** Line numbers
+
+#+begin_src emacs-lisp :tangle yes
 (setq display-line-numbers-type 'relative)
+#+end_src
 
+** RGB module
+
+Fix conflict for RGB module.
+
+#+begin_src emacs-lisp :tangle yes
 (add-hook! 'rainbow-mode-hook
   (hl-line-mode (if rainbow-mode -1 +1)))
+#+end_src
 
+
+** Dashboard customisation
+
+#+begin_src emacs-lisp :tangle yes
 (setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
 (add-hook! '+doom-dashboard-functions :append
            (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Any text editor can save your files, only Emacs can save your soul!")))
+
+#+end_src
+
+* Org mode
+
+** General customisation
+
+I also install org-appear, to reveal emphasis markers when moving the cursor over them.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-appear
+  :recipe (:host github
+           :repo "awth13/org-appear"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
 
 (setq org-directory "~/org/")
 
@@ -73,6 +127,12 @@
         org-hide-emphasis-markers t
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
 
+#+end_src
+
+** Org roam
+
+#+begin_src emacs-lisp :tangle yes
+
 (after! org
   (setq org-roam-directory "~/org/roam")
   (setq org-roam-capture-templates
@@ -97,3 +157,4 @@
     )
   )
   (org-roam-setup))
+#+end_src
