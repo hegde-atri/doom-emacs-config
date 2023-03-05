@@ -18,8 +18,8 @@
 
 #+begin_src emacs-lisp :tangle yes
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'light))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'regular))
 #+end_src
 
 ** Doom theme
@@ -57,6 +57,15 @@ Fix conflict for RGB module.
 (add-hook! '+doom-dashboard-functions :append
            (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Any text editor can save your files, only Emacs can save your soul!")))
 
+#+end_src
+
+** Evil mode
+
+Making it so that we go to next visual line in evil mode.
+
+#+begin_src emacs-lisp :tangle yes
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 #+end_src
 
 * Org mode
@@ -157,4 +166,22 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
     )
   )
   (org-roam-setup))
+#+end_src
+
+** ob-mermaid
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! ob-mermaid)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(after! ob-mermaid
+  :config
+  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
+
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((mermaid . t)
+      (scheme . t)))
+
 #+end_src

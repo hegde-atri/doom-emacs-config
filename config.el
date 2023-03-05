@@ -3,8 +3,8 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'light))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'regular))
 
 (setq doom-theme 'doom-palenight)
 
@@ -18,6 +18,9 @@
 (setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
 (add-hook! '+doom-dashboard-functions :append
            (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Any text editor can save your files, only Emacs can save your soul!")))
+
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
 (setq org-directory "~/org/")
 
@@ -97,3 +100,12 @@
     )
   )
   (org-roam-setup))
+
+(after! ob-mermaid
+  :config
+  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
+
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((mermaid . t)
+      (scheme . t)))
