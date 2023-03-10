@@ -3,8 +3,8 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'regular))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
 
 (setq doom-theme 'doom-palenight)
 
@@ -34,6 +34,8 @@
 (defun ha/org-setup ()
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
+  ;; Enlarge latex preview
+  (plist-put org-format-latex-options :scale 1.6)
   (add-hook! org-mode :append #'org-appear-mode)
 )
 
@@ -100,6 +102,10 @@
     )
   )
   (org-roam-setup))
+
+(after! org-auto-tangle
+  (add-hook! org-mode :append #'org-auto-tangle-mode)
+)
 
 (after! ob-mermaid
   :config

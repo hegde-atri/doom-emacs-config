@@ -18,8 +18,8 @@
 
 #+begin_src emacs-lisp :tangle yes
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16 :weight 'regular))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
 #+end_src
 
 ** Doom theme
@@ -94,6 +94,8 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
 (defun ha/org-setup ()
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
+  ;; Enlarge latex preview
+  (plist-put org-format-latex-options :scale 1.6)
   (add-hook! org-mode :append #'org-appear-mode)
 )
 
@@ -166,6 +168,18 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
     )
   )
   (org-roam-setup))
+#+end_src
+
+** org-auto-tangle
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-auto-tangle)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(after! org-auto-tangle
+  (add-hook! org-mode :append #'org-auto-tangle-mode)
+)
 #+end_src
 
 ** ob-mermaid
