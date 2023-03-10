@@ -35,7 +35,7 @@
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
   ;; Enlarge latex preview
-  (plist-put org-format-latex-options :scale 1.6)
+  (plist-put org-format-latex-options :scale 2)
   (add-hook! org-mode :append #'org-appear-mode)
 )
 
