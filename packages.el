@@ -8,3 +8,5 @@
 
 (unpin! org-roam)
 (package! org-roam-ui)
+
+(unpin! lsp-mode)

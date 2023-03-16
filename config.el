@@ -9,6 +9,15 @@
 (setq doom-theme 'doom-palenight)
 
 (setq doom-modeline-enable-word-count t)
+(setq doom-modeline-height 30     ;; sets modeline height
+      doom-modeline-bar-width 5   ;; sets right bar width
+      doom-modeline-persp-name t  ;; adds perspective name to modeline
+      doom-modeline-persp-icon t  ;; adds folder icon next to persp name
+      doom-modeline-icon t
+      doom-modeline-major-mode-color-icon t
+      doom-modeline-battery t
+      doom-modeline-major-mode-color-icon t
+      doom-modeline-enable-word-count nil) ;; word count
 
 (setq display-line-numbers-type 'relative)
 
@@ -21,6 +30,14 @@
 
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+(map! :leader
+      (:prefix ("=" . "open config")
+       :desc "Hyprland"      "h" #'(lambda () (interactive) (find-file "~/.config/hypr/hypr.org"))
+       :desc "zshrc"         "z" #'(lambda () (interactive) (find-file "~/.zshrc"))
+       :desc "eww"           "e" #'(lambda () (interactive) (find-file "~/.config/eww/eww.org"))
+       :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
+       :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
 
 (setq org-directory "~/org/")
 
@@ -103,8 +120,38 @@
   )
   (org-roam-setup))
 
-(after! org-auto-tangle
-  (add-hook! org-mode :append #'org-auto-tangle-mode)
+(setq
+   ;; org-fancy-priorities-list '("❗" "⚠" "👆")
+   org-fancy-priorities-list '("🟥" "🟧" "🟨")
+   ;;org-priority-faces
+   ;;'((?A :foreground "#ff6c6b" :weight bold)
+   ;;  (?B :foreground "#98be65" :weight bold)
+   ;;  (?C :foreground "#c678dd" :weight bold))
+   org-agenda-block-separator 8411)
+
+(setq org-agenda-custom-commands
+      '(("v" "A better agenda view"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
+          (tags "PRIORITY=\"B\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
+          (tags "PRIORITY=\"C\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
+          (tags "customtag"
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Tasks marked with customtag:")))
+
+          (agenda "")
+          (alltodo "")))))
+
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t)
 )
 
 (after! ob-mermaid
@@ -130,6 +177,12 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(use-package! lsp
+    :ensure
+    :custom
+    (lsp-rust-analyzer-server-display-inlay-hints t)
+)
 
 (define-derived-mode astro-mode web-mode "astro")
 (setq auto-mode-alist
