@@ -24,6 +24,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#evil-mode][Evil mode]]
 - [[#keybinds][Keybinds]]
   - [[#config-files][Config files]]
+  - [[#make-commands][Make commands]]
 - [[#org-mode][Org mode]]
   - [[#general-customisation][General customisation]]
   - [[#org-roam][Org roam]]
@@ -119,6 +120,15 @@ Making it so that we go to next visual line in evil mode.
        :desc "eww"           "e" #'(lambda () (interactive) (find-file "~/.config/eww/eww.org"))
        :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
        :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
+#+end_src
+
+** Make commands
+#+begin_src emacs-lisp :tangle yes
+(map! :leader
+      (:prefix ("p" . "open config")
+       (:prefix ("m" . "make tasks")
+       :desc "run-last"       "r" #'(lambda () (interactive) (+make/run-last))
+       :desc "run"          "R" #'(lambda () (interactive) (+make/run)))))
 #+end_src
 
 * Org mode

@@ -39,6 +39,12 @@
        :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
        :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
 
+(map! :leader
+      (:prefix ("p" . "open config")
+       (:prefix ("m" . "make tasks")
+       :desc "run-last"       "r" #'(lambda () (interactive) (+make/run-last))
+       :desc "run"          "R" #'(lambda () (interactive) (+make/run)))))
+
 (setq org-directory "~/org/")
 
 (defun ha/org-mode-visual-fill ()
