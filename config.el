@@ -6,18 +6,21 @@
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
 
-(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-moonlight)
 
 (setq doom-modeline-enable-word-count t)
 (setq doom-modeline-height 30     ;; sets modeline height
       doom-modeline-bar-width 5   ;; sets right bar width
-      doom-modeline-persp-name t  ;; adds perspective name to modeline
-      doom-modeline-persp-icon t  ;; adds folder icon next to persp name
+      ;; doom-modeline-persp-name t  ;; adds perspective name to modeline
+      ;; doom-modeline-persp-icon t  ;; adds folder icon next to persp name
       doom-modeline-icon t
       doom-modeline-major-mode-color-icon t
       doom-modeline-battery t
       doom-modeline-major-mode-color-icon t
       doom-modeline-enable-word-count nil) ;; word count
+
+;; (setq doom-themes-treemacs-theme "doom-colors")
+;; (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
 
 (setq display-line-numbers-type 'relative)
 
@@ -30,6 +33,14 @@
 
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+(setq shell-file-name "/bin/bash")
+(setq-default shell-file-name "/bin/bash")
+(setenv "SHELL" shell-file-name)
+
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "switch buffer"          "b" #'(lambda () (interactive) (counsel-switch-buffer))))
 
 (map! :leader
       (:prefix ("=" . "open config")
@@ -184,8 +195,13 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+;; (use-package! tree-sitter
+;;  :config
+;;  (require 'tree-sitter-langs)
+;;  (global-tree-sitter-mode)
+;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
 (use-package! lsp
-    :ensure
     :custom
     (lsp-rust-analyzer-server-display-inlay-hints t)
 )
@@ -203,3 +219,30 @@
    (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
                     :activation-fn (lsp-activate-on "astro")
                     :server-id 'astro-ls)))
+
+(add-hook! astro-mode #'lsp-deferred)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+;; if you use typescript-mode
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; if you use treesitter based typescript-ts-mode (emacs 29+)
+;; (add-hook 'typescript-ts-mode-hook #'setup-tide-mode)
+;; For tsx files.
+(add-hook 'tsx-ts-mode-hook #'setup-tide-mode)

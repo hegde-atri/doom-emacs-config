@@ -18,11 +18,14 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#doom-fonts][Doom fonts]]
   - [[#doom-theme][Doom theme]]
   - [[#doom-modeline][Doom modeline]]
+  - [[#all-the-icons][All the icons]]
   - [[#line-numbers][Line numbers]]
   - [[#rgb-module][RGB module]]
   - [[#dashboard-customisation][Dashboard customisation]]
   - [[#evil-mode][Evil mode]]
+  - [[#shell][Shell]]
 - [[#keybinds][Keybinds]]
+  - [[#replacing-defaults][Replacing defaults]]
   - [[#config-files][Config files]]
   - [[#make-commands][Make commands]]
 - [[#org-mode][Org mode]]
@@ -32,9 +35,10 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#org-auto-tangle][org-auto-tangle]]
   - [[#ob-mermaid][ob-mermaid]]
   - [[#org-roam-ui][org-roam-ui]]
-- [[#lsp][LSP]]
-  - [[#unpin-lsp][unpin lsp]]
-  - [[#astro][Astro]]
+- [[#dev][Dev]]
+  - [[#treesitter][Treesitter]]
+  - [[#tramp][Tramp]]
+  - [[#lsp][LSP]]
 
 * User Interface
 ** Name and Email
@@ -58,7 +62,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 ** Doom theme
 
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-moonlight)
 #+end_src
 
 ** Doom modeline
@@ -67,13 +71,20 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 (setq doom-modeline-enable-word-count t)
 (setq doom-modeline-height 30     ;; sets modeline height
       doom-modeline-bar-width 5   ;; sets right bar width
-      doom-modeline-persp-name t  ;; adds perspective name to modeline
-      doom-modeline-persp-icon t  ;; adds folder icon next to persp name
+      ;; doom-modeline-persp-name t  ;; adds perspective name to modeline
+      ;; doom-modeline-persp-icon t  ;; adds folder icon next to persp name
       doom-modeline-icon t
       doom-modeline-major-mode-color-icon t
       doom-modeline-battery t
       doom-modeline-major-mode-color-icon t
       doom-modeline-enable-word-count nil) ;; word count
+#+end_src
+
+** All the icons
+
+#+begin_src emacs-lisp :tangle yes
+;; (setq doom-themes-treemacs-theme "doom-colors")
+;; (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
 #+end_src
 
 ** Line numbers
@@ -109,7 +120,23 @@ Making it so that we go to next visual line in evil mode.
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 #+end_src
 
+** Shell
+#+begin_src emacs-lisp :tangle yes
+(setq shell-file-name "/bin/bash")
+(setq-default shell-file-name "/bin/bash")
+(setenv "SHELL" shell-file-name)
+#+end_src
+
 * Keybinds
+** Replacing defaults
+*** Switch buffer
+Use counsel switch buffer instead. (to get preview of buffer to switch to).
+
+#+begin_src emacs-lisp :tangle yes
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "switch buffer"          "b" #'(lambda () (interactive) (counsel-switch-buffer))))
+#+end_src
 ** Config files
 
 #+begin_src emacs-lisp :tangle yes
@@ -281,6 +308,8 @@ Add =#+auto_tangle: t= to the top of an org file to enable auto-tangle!
 
 ** ob-mermaid
 
+Needs ~mmdc~ available.
+
 #+begin_src emacs-lisp :tangle packages.el
 (package! ob-mermaid)
 #+end_src
@@ -332,25 +361,49 @@ Some diagrams need this config for text to appear within them
           org-roam-ui-open-on-start t))
 #+end_src
 
-* LSP
-** unpin lsp
+* Dev
+
+** Treesitter
+
+#+begin_src emacs-lisp :tangle packages.el
+;; (package! tree-sitter)
+;; (package! tree-sitter-langs)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; (use-package! tree-sitter
+;;  :config
+;;  (require 'tree-sitter-langs)
+;;  (global-tree-sitter-mode)
+;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+#+end_src
+
+** Tramp
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! tramp)
+#+end_src
+
+** LSP
+*** unpin lsp
 
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! lsp-mode)
 #+end_src
 
-*** Rust inlay hints
+**** Rust inlay hints
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! lsp
-    :ensure
     :custom
     (lsp-rust-analyzer-server-display-inlay-hints t)
 )
 #+end_src
 
-** Astro
-Support for =astro-ls= found in a github issue for lsp-mode.
+*** Astro
+
+Support for =astro-ls= found in a github issue for lsp-mode. Needs ~astro-ls~ installed.
+
 #+begin_src emacs-lisp :tangle yes
 (define-derived-mode astro-mode web-mode "astro")
 (setq auto-mode-alist
@@ -365,4 +418,49 @@ Support for =astro-ls= found in a github issue for lsp-mode.
    (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
                     :activation-fn (lsp-activate-on "astro")
                     :server-id 'astro-ls)))
+
+(add-hook! astro-mode #'lsp-deferred)
+#+end_src
+
+*** Prettier
+
+Have this installed, just in case I have a project that needs it.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! prettier)
+#+end_src
+
+*** Typescript
+
+TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be installed (ts-ls).
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! tide)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+;; if you use typescript-mode
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; if you use treesitter based typescript-ts-mode (emacs 29+)
+;; (add-hook 'typescript-ts-mode-hook #'setup-tide-mode)
+;; For tsx files.
+(add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
 #+end_src
