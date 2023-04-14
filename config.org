@@ -13,6 +13,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 * Table of Contents :TOC:
 - [[#preface][Preface]]
   - [[#note-taking][Note taking]]
+- [[#packages-required][Packages required]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and Email]]
   - [[#doom-fonts][Doom fonts]]
@@ -39,6 +40,13 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#treesitter][Treesitter]]
   - [[#tramp][Tramp]]
   - [[#lsp][LSP]]
+
+* Packages required
+I mainly use Artix Linux, so the packages are installed using =paru=.
+
+#+begin_src shell :tangle no
+paru -S ripgrep fd wordnet-cli rust-analyzer
+#+end_src
 
 * User Interface
 ** Name and Email
