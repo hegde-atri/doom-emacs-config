@@ -77,16 +77,27 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
 ** Doom modeline
 
 #+begin_src emacs-lisp :tangle yes
-(setq doom-modeline-enable-word-count t)
-(setq doom-modeline-height 30     ;; sets modeline height
-      doom-modeline-bar-width 5   ;; sets right bar width
-      ;; doom-modeline-persp-name t  ;; adds perspective name to modeline
-      ;; doom-modeline-persp-icon t  ;; adds folder icon next to persp name
-      doom-modeline-icon t
-      doom-modeline-major-mode-color-icon t
-      doom-modeline-battery t
-      doom-modeline-major-mode-color-icon t
-      doom-modeline-enable-word-count nil) ;; word count
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :custom    
+  (doom-modeline-height 25)
+  (doom-modeline-bar-width 1)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count nil)
+  (doom-modeline-buffer-encoding t)
+  (doom-modeline-indent-info nil)
+  (doom-modeline-checker-simple-format t)
+  (doom-modeline-vcs-max-length 12)
+  (doom-modeline-env-version t)
+  (doom-modeline-irc-stylize 'identity)
+  (doom-modeline-github-timer nil)
+  (doom-modeline-gnus-timer nil))
 #+end_src
 
 ** All the icons
