@@ -4,6 +4,8 @@
 
 (package! org-auto-tangle)
 
+(package! ob-ledger :recipe (:local-repo "lisp/ob-ledger"))
+
 (package! ob-mermaid)
 
 (unpin! org-roam)

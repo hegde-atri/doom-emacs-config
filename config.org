@@ -34,6 +34,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#org-roam][Org roam]]
   - [[#org-agenda][org-agenda]]
   - [[#org-auto-tangle][org-auto-tangle]]
+  - [[#ob-ledger][ob-ledger]]
   - [[#ob-mermaid][ob-mermaid]]
   - [[#org-roam-ui][org-roam-ui]]
 - [[#dev][Dev]]
@@ -314,6 +315,18 @@ Add =#+auto_tangle: t= to the top of an org file to enable auto-tangle!
 )
 #+end_src
 
+** ob-ledger
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! ob-ledger :recipe (:local-repo "lisp/ob-ledger"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((ledger . t)))
+#+end_src
+
 ** ob-mermaid
 
 Needs ~mmdc~ available.
@@ -330,7 +343,8 @@ Needs ~mmdc~ available.
 (org-babel-do-load-languages
     'org-babel-load-languages
     '((mermaid . t)
-      (scheme . t)))
+      (scheme . t)
+      (ledger . t)))
 #+end_src
 
 *** Mermaid configuration
@@ -399,13 +413,42 @@ Some diagrams need this config for text to appear within them
 (unpin! lsp-mode)
 #+end_src
 
-**** Rust inlay hints
+*** Rust
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! lsp
     :custom
     (lsp-rust-analyzer-server-display-inlay-hints t)
 )
+#+end_src
+
+**** Rust GDB
+
+#+begin_src emacs-lisp :tangle yes
+(setq dap-cpptools-extension-version "1.5.1")
+
+  (with-eval-after-load 'lsp-rust
+    (require 'dap-cpptools))
+
+  (with-eval-after-load 'dap-cpptools
+    ;; Add a template specific for debugging Rust programs.
+    ;; It is used for new projects, where I can M-x dap-edit-debug-template
+    (dap-register-debug-template "Rust::CppTools Run Configuration"
+                                 (list :type "cppdbg"
+                                       :request "launch"
+                                       :name "Rust::Run"
+                                       :MIMode "gdb"
+                                       :miDebuggerPath "rust-gdb"
+                                       :environment []
+                                       :program "${workspaceFolder}/target/debug/hello / replace with binary"
+                                       :cwd "${workspaceFolder}"
+                                       :console "external"
+                                       :dap-compilation "cargo build"
+                                       :dap-compilation-dir "${workspaceFolder}")))
+
+  (with-eval-after-load 'dap-mode
+    (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
+    (dap-auto-configure-mode +1))
 #+end_src
 
 *** Astro
