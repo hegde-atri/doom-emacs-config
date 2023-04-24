@@ -21,10 +21,10 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company)           ; the ultimate code completion backend
-       ;; (helm +fuzzy +icons)              ; the *other* search engine for love and life
-       ;; ido               ; the other *other* search engine...
-       (ivy +fuzzy +icons +prescient)              ; a search engine for love and life
+       company           ; the ultimate code completion backend
+       ;;helm              ; the *other* search engine for love and life
+       ;;ido               ; the other *other* search engine...
+       (ivy +fuzzy +icons +prescient)               ; a search engine for love and life
        (vertico +icons)           ; the search engine of the future
 
        :ui
@@ -34,7 +34,7 @@
        ;;doom-quit         ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       hydra
+       ;;hydra
        ;;indent-guides     ; highlighted indent columns
        (ligatures +extra)         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
@@ -81,12 +81,12 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       ;;(spell +aspell) ; tasing you for misspelling mispelling
+       ;;(spell +flyspell) ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
-       biblio            ; REVIEW: Writes a PhD for you (citation needed)
+       biblio            ; Writes a PhD for you (citation needed)
        (debugger +lsp)          ; FIXME stepping through code, to help you add bugs
        direnv
        (docker +lsp)
@@ -96,14 +96,14 @@
        ;;gist              ; interacting with github gists
        (lookup +dictionary +offline)              ; navigate your code and its documentation
        (lsp +peek)               ; M-x vscode
-       (magit +forge)             ; a git porcelain for Emacs
+       magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
        pdf               ; pdf enhancements
        ;;prodigy           ; FIXME managing external services & code builders
        rgb               ; creating color strings
        taskrunner        ; taskrunner for all your projects
-       terraform         ; infrastructure as code
+       ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        tree-sitter       ; syntax and parsing, sitting in a tree...
        upload            ; map local to remote projects via ssh/ftp
@@ -137,7 +137,7 @@
        ;;gdscript          ; the language you waited for
        (go +lsp +tree-sitter)         ; the hipster dialect
        ;;(graphql +lsp)    ; Give queries a REST
-       (haskell +tree-sitter)    ; a language that's lazier than I am
+       (haskell +lsp +tree-sitter)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        (json +tree-sitter)              ; At least it ain't XML
@@ -148,7 +148,7 @@
        (latex +cdlatex +fold +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ledger            ; be audit you can be
-       (lua +tree-sitter)               ; one-based indices? one-based indices
+       (lua +tree-sitter)              ; one-based indices? one-based indices
        (markdown +grip)          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        (nix +tree-sitter)               ; I hereby declare "nix geht mehr!"
@@ -157,13 +157,13 @@
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +poetry +lsp +tree-sitter)            ; beautiful is better than ugly
+       (python +lsp +poetry +tree-sitter)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
-       (ruby +lsp +solargraph +rbenv +tree-sitter)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"} SPC m t v and SPC m t s
+       (ruby +rails +lsp +solargraph +rbenv +tree-sitter)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust +lsp +tree-sitter)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps

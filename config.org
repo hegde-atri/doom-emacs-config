@@ -6,6 +6,7 @@
 GNU Emacs is not just a text editor, it’s the ultimate tool for productivity. This document contains my Emacs Configuration which is a main part of my workflow everyday.
 
 ** Note taking
+
 I manage my notes using org-roam. Here is a screenshot of my workflow. I have Emacs, org-roam-ui and ncmpcpp open.
 
 [[./note-taking.png]]
@@ -16,13 +17,13 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 - [[#packages-required][Packages required]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and Email]]
+  - [[#transparency][Transparency]]
   - [[#doom-fonts][Doom fonts]]
   - [[#doom-theme][Doom theme]]
   - [[#doom-modeline][Doom modeline]]
-  - [[#all-the-icons][All the icons]]
+  - [[#doom-dashboard][Doom dashboard]]
   - [[#line-numbers][Line numbers]]
   - [[#rgb-module][RGB module]]
-  - [[#dashboard-customisation][Dashboard customisation]]
   - [[#evil-mode][Evil mode]]
   - [[#shell][Shell]]
 - [[#keybinds][Keybinds]]
@@ -37,12 +38,15 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#ob-ledger][ob-ledger]]
   - [[#ob-mermaid][ob-mermaid]]
   - [[#org-roam-ui][org-roam-ui]]
-- [[#dev][Dev]]
-  - [[#treesitter][Treesitter]]
-  - [[#tramp][Tramp]]
-  - [[#lsp][LSP]]
+- [[#lsp][LSP]]
+  - [[#unpin-lsp][unpin lsp]]
+  - [[#rust][Rust]]
+  - [[#astro][Astro]]
+  - [[#prettier][Prettier]]
+  - [[#typescript][Typescript]]
 
 * Packages required
+
 I mainly use Artix Linux, so the packages are installed using =paru=.
 
 #+begin_src shell :tangle no
@@ -50,6 +54,7 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
 #+end_src
 
 * User Interface
+
 ** Name and Email
 
 #+begin_src emacs-lisp :tangle yes
@@ -58,6 +63,13 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
+#+end_src
+
+** Transparency
+
+#+begin_src emacs-lisp :tangle yes
+(set-frame-parameter nil 'alpha-background 70) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
 #+end_src
 
 ** Doom fonts
@@ -71,7 +83,7 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
 ** Doom theme
 
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-moonlight)
+(setq doom-theme 'doom-palenight)
 #+end_src
 
 ** Doom modeline
@@ -79,8 +91,8 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
 #+begin_src emacs-lisp :tangle yes
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
-  :custom    
-  (doom-modeline-height 25)
+  :custom
+  (doom-modeline-height 35)
   (doom-modeline-bar-width 1)
   (doom-modeline-icon t)
   (doom-modeline-major-mode-icon t)
@@ -100,11 +112,10 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
   (doom-modeline-gnus-timer nil))
 #+end_src
 
-** All the icons
+** Doom dashboard
 
 #+begin_src emacs-lisp :tangle yes
-;; (setq doom-themes-treemacs-theme "doom-colors")
-;; (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
+(setq fancy-splash-image "~/.doom.d/xemacs_color.png")
 #+end_src
 
 ** Line numbers
@@ -122,15 +133,6 @@ Fix conflict for RGB module.
   (hl-line-mode (if rainbow-mode -1 +1)))
 #+end_src
 
-** Dashboard customisation
-
-#+begin_src emacs-lisp :tangle yes
-(setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
-(add-hook! '+doom-dashboard-functions :append
-           (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Any text editor can save your files, only Emacs can save your soul!")))
-
-#+end_src
-
 ** Evil mode
 
 Making it so that we go to next visual line in evil mode.
@@ -141,6 +143,7 @@ Making it so that we go to next visual line in evil mode.
 #+end_src
 
 ** Shell
+
 #+begin_src emacs-lisp :tangle yes
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
@@ -148,8 +151,15 @@ Making it so that we go to next visual line in evil mode.
 #+end_src
 
 * Keybinds
+
 ** Replacing defaults
+
+*** Comment/Uncomment
+
+TODO
+
 *** Switch buffer
+
 Use counsel switch buffer instead. (to get preview of buffer to switch to).
 
 #+begin_src emacs-lisp :tangle yes
@@ -157,6 +167,7 @@ Use counsel switch buffer instead. (to get preview of buffer to switch to).
       (:prefix ("b" . "buffer")
        :desc "switch buffer"          "b" #'(lambda () (interactive) (counsel-switch-buffer))))
 #+end_src
+
 ** Config files
 
 #+begin_src emacs-lisp :tangle yes
@@ -170,6 +181,7 @@ Use counsel switch buffer instead. (to get preview of buffer to switch to).
 #+end_src
 
 ** Make commands
+
 #+begin_src emacs-lisp :tangle yes
 (map! :leader
       (:prefix ("p" . "open config")
@@ -394,37 +406,14 @@ Some diagrams need this config for text to appear within them
           org-roam-ui-open-on-start t))
 #+end_src
 
-* Dev
-
-** Treesitter
-
-#+begin_src emacs-lisp :tangle packages.el
-;; (package! tree-sitter)
-;; (package! tree-sitter-langs)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-;; (use-package! tree-sitter
-;;  :config
-;;  (require 'tree-sitter-langs)
-;;  (global-tree-sitter-mode)
-;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-#+end_src
-
-** Tramp
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! tramp)
-#+end_src
-
-** LSP
-*** unpin lsp
+* LSP
+** unpin lsp
 
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! lsp-mode)
 #+end_src
 
-*** Rust
+** Rust
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! lsp
@@ -433,7 +422,7 @@ Some diagrams need this config for text to appear within them
 )
 #+end_src
 
-**** Rust GDB
+*** Rust GDB
 
 #+begin_src emacs-lisp :tangle yes
 (setq dap-cpptools-extension-version "1.5.1")
@@ -462,7 +451,7 @@ Some diagrams need this config for text to appear within them
     (dap-auto-configure-mode +1))
 #+end_src
 
-*** Astro
+** Astro
 
 Support for =astro-ls= found in a github issue for lsp-mode. Needs ~astro-ls~ installed.
 
@@ -484,7 +473,7 @@ Support for =astro-ls= found in a github issue for lsp-mode. Needs ~astro-ls~ in
 (add-hook! astro-mode #'lsp-deferred)
 #+end_src
 
-*** Prettier
+** Prettier
 
 Have this installed, just in case I have a project that needs it.
 
@@ -492,7 +481,7 @@ Have this installed, just in case I have a project that needs it.
 (package! prettier)
 #+end_src
 
-*** Typescript
+** Typescript
 
 TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be installed (ts-ls).
 

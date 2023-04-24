@@ -11,11 +11,6 @@
 (unpin! org-roam)
 (package! org-roam-ui)
 
-;; (package! tree-sitter)
-;; (package! tree-sitter-langs)
-
-(package! tramp)
-
 (unpin! lsp-mode)
 
 (package! prettier)

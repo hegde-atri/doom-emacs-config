@@ -3,33 +3,42 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
+(set-frame-parameter nil 'alpha-background 70) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
+
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
 
-(setq doom-theme 'doom-moonlight)
+(setq doom-theme 'doom-palenight)
 
-(setq doom-modeline-enable-word-count t)
-(setq doom-modeline-height 30     ;; sets modeline height
-      doom-modeline-bar-width 5   ;; sets right bar width
-      ;; doom-modeline-persp-name t  ;; adds perspective name to modeline
-      ;; doom-modeline-persp-icon t  ;; adds folder icon next to persp name
-      doom-modeline-icon t
-      doom-modeline-major-mode-color-icon t
-      doom-modeline-battery t
-      doom-modeline-major-mode-color-icon t
-      doom-modeline-enable-word-count nil) ;; word count
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-height 35)
+  (doom-modeline-bar-width 1)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-enable-word-count nil)
+  (doom-modeline-buffer-encoding t)
+  (doom-modeline-indent-info nil)
+  (doom-modeline-checker-simple-format t)
+  (doom-modeline-vcs-max-length 12)
+  (doom-modeline-env-version t)
+  (doom-modeline-irc-stylize 'identity)
+  (doom-modeline-github-timer nil)
+  (doom-modeline-gnus-timer nil))
 
-;; (setq doom-themes-treemacs-theme "doom-colors")
-;; (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
+(setq fancy-splash-image "~/.doom.d/xemacs_color.png")
 
 (setq display-line-numbers-type 'relative)
 
 (add-hook! 'rainbow-mode-hook
   (hl-line-mode (if rainbow-mode -1 +1)))
-
-(setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
-(add-hook! '+doom-dashboard-functions :append
-           (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Any text editor can save your files, only Emacs can save your soul!")))
 
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
@@ -199,12 +208,6 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
-
-;; (use-package! tree-sitter
-;;  :config
-;;  (require 'tree-sitter-langs)
-;;  (global-tree-sitter-mode)
-;;  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (use-package! lsp
     :custom
