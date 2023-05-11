@@ -3,8 +3,32 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
-(set-frame-parameter nil 'alpha-background 70) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 70)) ; For all new frames henceforth
+(set-frame-parameter nil 'alpha-background 50) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 50)) ; For all new frames henceforth
+
+(defun ha/transparency-round (val)
+  "Round VAL to the nearest tenth of an integer."
+  (/ (round (* 10 val)) 10.0))
+
+(defun ha/increase-frame-alpha-background ()
+  "Increase current frame’s alpha background."
+  (interactive)
+  (set-frame-parameter nil
+                       'alpha-background
+                       (ha/transparency-round
+                        (min 1.0
+                             (+ (frame-parameter nil 'alpha-background) 0.1))))
+  (message "%s" (frame-parameter nil 'alpha-background)))
+
+(defun ha/decrease-frame-alpha-background ()
+  "Decrease current frame’s alpha background."
+  (interactive)
+  (set-frame-parameter nil
+                       'alpha-background
+                       (ha/transparency-round
+                        (max 0.0
+                             (- (frame-parameter nil 'alpha-background) 0.1))))
+  (message "%s" (frame-parameter nil 'alpha-background)))
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
@@ -17,6 +41,7 @@
   (doom-modeline-height 35)
   (doom-modeline-bar-width 1)
   (doom-modeline-icon t)
+  (display-battery-mode t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-major-mode-color-icon t)
   (doom-modeline-buffer-file-name-style 'truncate-upto-project)
@@ -78,10 +103,22 @@
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
   ;; Enlarge latex preview
-  (plist-put org-format-latex-options :scale 2)
+  ;; (plist-put org-format-latex-options :scale 0.5)
+  ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
+  ;; (plist-put org-format-latex-options :background "Transparent")
   (add-hook! org-mode :append #'org-appear-mode)
 )
 
+(defun ha/org-mode-latex ()
+  (when (looking-back (rx "$ "))
+    (save-excursion
+      (backward-char 1)
+      (org-toggle-latex-fragment))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-cdlatex-mode)
+            (add-hook 'post-self-insert-hook #'krofna-hack 'append 'local)))
 
 (defun ha/org-font-setup ()
   ;; Doesn't work in Doom emacs
@@ -209,6 +246,13 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(after! lsp-ui
+  (setq lsp-ui-doc-show-with-cursor nil
+        lsp-ui-doc-show-with-mouse t))
+
+(use-package! evil-nerd-commenter
+  :init (evilnc-default-hotkeys))
+
 (use-package! lsp
     :custom
     (lsp-rust-analyzer-server-display-inlay-hints t)
@@ -279,3 +323,69 @@
 ;; (add-hook 'typescript-ts-mode-hook #'setup-tide-mode)
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
+
+;; (use-package codeium
+;;     :init
+;;     ;; use globally
+;;     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+;;     ;; or on a hook
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local completion-at-point-functions '(codeium-completion-at-point))))
+
+;;     ;; if you want multiple completion backends, use cape (https://github.com/minad/cape):
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local completion-at-point-functions
+;;     ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
+;;     ;; an async company-backend is coming soon!
+
+;;     ;; codeium-completion-at-point is autoloaded, but you can
+;;     ;; optionally set a timer, which might speed up things as the
+;;     ;; codeium local language server takes ~0.2s to start up
+;;     ;; (add-hook 'emacs-startup-hook
+;;     ;;  (lambda () (run-with-timer 0.1 nil #'codeium-init)))
+
+;;     ;; :defer t ;; lazy loading, if you want
+;;     :config
+;;     (setq use-dialog-box nil) ;; do not use popup boxes
+
+;;     ;; if you don't want to use customize to save the api-key
+;;     ;; (setq codeium/metadata/api_key "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+
+;;     ;; get codeium status in the modeline
+;;     (setq codeium-mode-line-enable
+;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;     (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
+;;     ;; alternatively for a more extensive mode-line
+;;     ;; (add-to-list 'mode-line-format '(-50 "" codeium-mode-line) t)
+
+;;     ;; use M-x codeium-diagnose to see apis/fields that would be sent to the local language server
+;;     (setq codeium-api-enabled
+;;         (lambda (api)
+;;             (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+;;     ;; you can also set a config for a single buffer like this:
+;;     ;; (add-hook 'python-mode-hook
+;;     ;;     (lambda ()
+;;     ;;         (setq-local codeium/editor_options/tab_size 4)))
+
+;;     ;; You can overwrite all the codeium configs!
+;;     ;; for example, we recommend limiting the string sent to codeium for better performance
+;;     (defun my-codeium/document/text ()
+;;         (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+;;     ;; if you change the text, you should also change the cursor_offset
+;;     ;; warning: this is measured by UTF-8 encoded bytes
+;;     (defun my-codeium/document/cursor_offset ()
+;;         (codeium-utf8-byte-length
+;;             (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;     (setq codeium/document/text 'my-codeium/document/text)
+;;     (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset))
+
+;; accept completion from copilot and fallback to company
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))

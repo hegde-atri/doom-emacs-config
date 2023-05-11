@@ -1,0 +1,3 @@
+(use-package! evil-nerd-commenter
+  :after evil
+  :straight (:build t))
