@@ -57,8 +57,16 @@
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
   (doom-modeline-gnus-timer nil))
+;;(after! doom-modeline
+;; (setq doom-modeline-height 35
+;;        display-battery-mode t
+;;        doom-modeline-icon t
+;;        doom-modeline-buffer-state-icon t
+;;        doom-modeline-buffer-modification-icon t
+;;        )
+;;)
 
-(setq fancy-splash-image "~/.doom.d/xemacs_color.png")
+(setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
 
 (setq display-line-numbers-type 'relative)
 
