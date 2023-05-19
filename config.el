@@ -40,13 +40,14 @@
   :custom
   (doom-modeline-height 35)
   (doom-modeline-bar-width 1)
-  (doom-modeline-icon t)
   (display-battery-mode t)
+  (doom-modeline-icon t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-major-mode-color-icon t)
   (doom-modeline-buffer-file-name-style 'truncate-upto-project)
   (doom-modeline-buffer-state-icon t)
   (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-persp-name nil)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count nil)
   (doom-modeline-buffer-encoding t)
@@ -57,14 +58,6 @@
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
   (doom-modeline-gnus-timer nil))
-;;(after! doom-modeline
-;; (setq doom-modeline-height 35
-;;        display-battery-mode t
-;;        doom-modeline-icon t
-;;        doom-modeline-buffer-state-icon t
-;;        doom-modeline-buffer-modification-icon t
-;;        )
-;;)
 
 (setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
 
@@ -164,7 +157,10 @@
   (setq
         org-ellipsis " ▼ "
         org-hide-emphasis-markers t
-        org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
+        ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
+        org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
+        ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+))
 
 (after! org
   (setq org-roam-directory "~/org/roam")
@@ -332,7 +328,12 @@
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
 
+;; we recommend using use-package to organize your init.el
 ;; (use-package codeium
+;;     ;; if you use straight
+;;     ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+;;     ;; otherwise, make sure that the codeium.el file is on load-path
+
 ;;     :init
 ;;     ;; use globally
 ;;     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)

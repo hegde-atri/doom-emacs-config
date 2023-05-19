@@ -127,13 +127,14 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
   :custom
   (doom-modeline-height 35)
   (doom-modeline-bar-width 1)
-  (doom-modeline-icon t)
   (display-battery-mode t)
+  (doom-modeline-icon t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-major-mode-color-icon t)
   (doom-modeline-buffer-file-name-style 'truncate-upto-project)
   (doom-modeline-buffer-state-icon t)
   (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-persp-name nil)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count nil)
   (doom-modeline-buffer-encoding t)
@@ -144,14 +145,6 @@ paru -S ripgrep fd wordnet-cli rust-analyzer
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
   (doom-modeline-gnus-timer nil))
-;;(after! doom-modeline
-;; (setq doom-modeline-height 35
-;;        display-battery-mode t
-;;        doom-modeline-icon t
-;;        doom-modeline-buffer-state-icon t
-;;        doom-modeline-buffer-modification-icon t
-;;        )
-;;)
 #+end_src
 
 ** Doom dashboard
@@ -312,8 +305,10 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
   (setq
         org-ellipsis " ▼ "
         org-hide-emphasis-markers t
-        org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")))
-
+        ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
+        org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
+        ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+))
 #+end_src
 
 ** Org roam
@@ -553,7 +548,6 @@ Have this installed, just in case I have a project that needs it.
 #+end_src
 
 ** Typescript
-
 TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be installed (ts-ls).
 
 #+begin_src emacs-lisp :tangle packages.el
@@ -586,8 +580,6 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
 #+end_src
-
-
 * AI-powered completion
 
 ** Codeium
@@ -597,7 +589,12 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
+;; we recommend using use-package to organize your init.el
 ;; (use-package codeium
+;;     ;; if you use straight
+;;     ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+;;     ;; otherwise, make sure that the codeium.el file is on load-path
+
 ;;     :init
 ;;     ;; use globally
 ;;     (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
