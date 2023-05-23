@@ -41,6 +41,7 @@
   (doom-modeline-height 35)
   (doom-modeline-bar-width 1)
   (display-battery-mode t)
+  (doom-modeline-time t)
   (doom-modeline-icon t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-major-mode-color-icon t)
