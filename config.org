@@ -38,6 +38,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#ob-ledger][ob-ledger]]
   - [[#ob-mermaid][ob-mermaid]]
   - [[#org-roam-ui][org-roam-ui]]
+  - [[#simple-notes][Simple notes]]
 - [[#lsp][LSP]]
   - [[#unpin-lsp][unpin lsp]]
   - [[#evil-nerd-commentor][Evil nerd commentor]]
@@ -456,6 +457,23 @@ Some diagrams need this config for text to appear within them
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 #+end_src
+
+** Simple notes
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! simplenote2)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! simplenote2
+  :defer t
+  :config
+  (setq simplenote2-email "iamatrihegde@gmail.com"
+        simplenote2-password nil
+        simplenote2-markdown-notes-mode "markdown-mode"
+        simplenote2-directory "~/org/todo"))
+#+end_src
+
 
 * LSP
 ** unpin lsp

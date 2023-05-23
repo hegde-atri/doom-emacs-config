@@ -251,6 +251,14 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(use-package! simplenote2
+  :defer t
+  :config
+  (setq simplenote2-email "iamatrihegde@gmail.com"
+        simplenote2-password nil
+        simplenote2-markdown-notes-mode "markdown-mode"
+        simplenote2-directory "~/org/todo"))
+
 (after! lsp-ui
   (setq lsp-ui-doc-show-with-cursor nil
         lsp-ui-doc-show-with-mouse t))

@@ -13,6 +13,8 @@
 (unpin! org-roam)
 (package! org-roam-ui)
 
+(package! simplenote2)
+
 (unpin! lsp-mode)
 
 
