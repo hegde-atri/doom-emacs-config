@@ -52,10 +52,10 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 
 * Packages required
 
-I mainly use Artix Linux, so the packages are installed using =paru=.
+I mainly use Artix/Arch Linux, so the packages are installed using =paru=.
 
 #+begin_src shell :tangle no
-paru -S ripgrep fd wordnet-cli rust-analyzer
+paru -S ripgrep fd rust-analyzer go gopls shellfmt tidy python-pipenv python-pytest python-isort python-black pyright python-pyflakes ledger maim graphviz gnuplot stylelint
 #+end_src
 
 * User Interface
