@@ -15,6 +15,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
 - [[#preface][Preface]]
   - [[#note-taking][Note taking]]
 - [[#packages-required][Packages required]]
+  - [[#go-packages-required][Go packages required]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and Email]]
   - [[#transparency][Transparency]]
@@ -56,6 +57,22 @@ I mainly use Artix/Arch Linux, so the packages are installed using =paru=.
 
 #+begin_src shell :tangle no
 paru -S ripgrep fd rust-analyzer go gopls shellfmt tidy python-pipenv python-pytest python-isort python-black pyright python-pyflakes ledger maim graphviz gnuplot stylelint
+#+end_src
+
+** Go packages required
+
+#+begin_src shell :tangle no
+go install github.com/fatih/gomodifytags@latest
+go install github.com/cweill/gotests/...@latest
+go install golang.org/x/tools/cmd/guru@latest
+go install github.com/x-motemen/gore/cmd/gore@latest
+#+end_src
+
+*** Recommended
+
+After installing =go-global-update=, you can run it to update instaled binaries.
+#+begin_src shell :tangle no
+go install github.com/Gelio/go-global-update@latest
 #+end_src
 
 * User Interface
@@ -255,9 +272,9 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
   (setq org-hide-emphasis-markers t)
   ;; Enlarge latex preview
   ;; (plist-put org-format-latex-options :scale 0.5)
-  ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
-  ;; (plist-put org-format-latex-options :background "Transparent")
-  (add-hook! org-mode :append #'org-appear-mode)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+  (plist-put org-format-latex-options :background "Transparent")
+  (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
 )
 
 (defun ha/org-mode-latex ()
@@ -312,6 +329,9 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
         ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
 ))
 #+end_src
+
+#+RESULTS:
+| ⁖ | ○ | ◉ | ● | ✸ | ✿ |
 
 ** Org roam
 
