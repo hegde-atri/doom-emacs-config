@@ -70,7 +70,7 @@ go install github.com/x-motemen/gore/cmd/gore@latest
 
 *** Recommended
 
-After installing =go-global-update=, you can run it to update instaled binaries.
+After installing =go-global-update=, you can run it to update installed binaries.
 #+begin_src shell :tangle no
 go install github.com/Gelio/go-global-update@latest
 #+end_src
@@ -124,7 +124,7 @@ go install github.com/Gelio/go-global-update@latest
 #+begin_src emacs-lisp :tangle yes
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12 :weight 'regular))
 #+end_src
 
 ** Doom theme
@@ -207,10 +207,6 @@ Making it so that we go to next visual line in evil mode.
 * Keybinds
 
 ** Replacing defaults
-
-*** Comment/Uncomment
-
-TODO
 
 *** Switch buffer
 
@@ -328,10 +324,11 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
         org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
         ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
 ))
-#+end_src
 
-#+RESULTS:
-| ⁖ | ○ | ◉ | ● | ✸ | ✿ |
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
+(add-hook 'org-mode-hook #'buffer-face-mode)
+#+end_src
 
 ** Org roam
 

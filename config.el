@@ -31,7 +31,7 @@
   (message "%s" (frame-parameter nil 'alpha-background)))
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 15 :weight 'regular))
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12 :weight 'regular))
 
 (setq doom-theme 'doom-palenight)
 
@@ -162,6 +162,10 @@
         org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
         ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
 ))
+
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
+(add-hook 'org-mode-hook #'buffer-face-mode)
 
 (after! org
   (setq org-roam-directory "~/org/roam")
