@@ -106,7 +106,7 @@
   (setq org-hide-emphasis-markers t)
   ;; Enlarge latex preview
   ;; (plist-put org-format-latex-options :scale 0.5)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
   (plist-put org-format-latex-options :background "Transparent")
   (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
 )
