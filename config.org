@@ -18,6 +18,7 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#go-packages-required][Go packages required]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and Email]]
+  - [[#name-and-email-1][Name and Email]]
   - [[#transparency][Transparency]]
   - [[#doom-fonts][Doom fonts]]
   - [[#doom-theme][Doom theme]]
@@ -77,6 +78,7 @@ go install github.com/Gelio/go-global-update@latest
 
 * User Interface
 
+
 ** Name and Email
 
 #+begin_src emacs-lisp :tangle yes
@@ -85,6 +87,12 @@ go install github.com/Gelio/go-global-update@latest
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
+#+end_src
+
+** Name and Email
+
+#+begin_src emacs-lisp :tangle yes
+(setq native-compile-prune-cache t)
 #+end_src
 
 ** Transparency

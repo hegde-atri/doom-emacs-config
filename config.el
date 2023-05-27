@@ -3,6 +3,8 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@hegdeatri.com")
 
+(setq native-compile-prune-cache t)
+
 (set-frame-parameter nil 'alpha-background 50) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 50)) ; For all new frames henceforth
 
