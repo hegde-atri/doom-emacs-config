@@ -94,13 +94,6 @@
 
 (setq org-directory "~/org/")
 
-(defun ha/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-;; Setting up hook for visual fill
-(add-hook 'org-mode 'ha/org-mode-visual-fill)
-
 (defun ha/org-setup ()
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
@@ -111,22 +104,7 @@
   (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
 )
 
-(defun ha/org-mode-latex ()
-  (when (looking-back (rx "$ "))
-    (save-excursion
-      (backward-char 1)
-      (org-toggle-latex-fragment))))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (org-cdlatex-mode)
-            (add-hook 'post-self-insert-hook #'krofna-hack 'append 'local)))
-
 (defun ha/org-font-setup ()
-  ;; Doesn't work in Doom emacs
-  ;;(font-lock-add-keywords 'org-mode
-  ;;                       '(("^ *\\([-]\\) "
-  ;;                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
   ;; Change font size of headings.
   (dolist (face '((org-level-1 . 1.5)
                   (org-level-2 . 1.4)
@@ -153,8 +131,6 @@
   (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
 
 (after! org
-  (ha/org-setup)
-  (ha/org-font-setup)
   (setq
         org-ellipsis " ▼ "
         org-hide-emphasis-markers t
@@ -165,6 +141,7 @@
 
 ;; writeroom mode bydefault for org roam buffers.
 (add-hook 'org-mode-hook #'+zen/toggle t)
+;; Keep modeline in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
 
 (after! org
