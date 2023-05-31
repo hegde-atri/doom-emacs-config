@@ -1,3 +1,7 @@
+(package! centered-cursor-mode)
+
+(package! beacon)
+
 (unpin! doom-modeline)
 
 (package! org-appear
@@ -22,6 +26,10 @@
 (package! prettier)
 
 (package! tide)
+
+(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+
+(package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 
 ;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 

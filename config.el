@@ -5,6 +5,20 @@
 
 (setq native-compile-prune-cache t)
 
+(use-package! centered-cursor-mode)
+;; disable in terminal modes
+;; http://stackoverflow.com/a/6849467/519736
+;; also disable in Info mode, because it breaks going back with the backspace key
+(define-global-minor-mode ha-global-centered-cursor-mode centered-cursor-mode
+  (lambda ()
+    (when (not (memq major-mode
+                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode)))
+      (centered-cursor-mode))))
+(ha-global-centered-cursor-mode 1)
+
+(use-package! beacon)
+(beacon-mode 1)
+
 (set-frame-parameter nil 'alpha-background 50) ; For current frame
 (add-to-list 'default-frame-alist '(alpha-background . 50)) ; For all new frames henceforth
 
@@ -319,6 +333,10 @@
 ;; (add-hook 'typescript-ts-mode-hook #'setup-tide-mode)
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
+
+(use-package! lsp-tailwindcss)
+
+(use-package! prisma-mode)
 
 ;; we recommend using use-package to organize your init.el
 ;; (use-package codeium

@@ -18,7 +18,9 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#go-packages-required][Go packages required]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and Email]]
-  - [[#name-and-email-1][Name and Email]]
+  - [[#gc][GC]]
+  - [[#center-cursor][Center Cursor]]
+  - [[#beacon][Beacon]]
   - [[#transparency][Transparency]]
   - [[#doom-fonts][Doom fonts]]
   - [[#doom-theme][Doom theme]]
@@ -48,6 +50,8 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#astro][Astro]]
   - [[#prettier][Prettier]]
   - [[#typescript][Typescript]]
+  - [[#tailwindcss][Tailwindcss]]
+  - [[#prisma][Prisma]]
 - [[#ai-powered-completion][AI-powered completion]]
   - [[#codeium][Codeium]]
   - [[#github-copilot][Github copilot]]
@@ -77,8 +81,6 @@ go install github.com/Gelio/go-global-update@latest
 #+end_src
 
 * User Interface
-
-
 ** Name and Email
 
 #+begin_src emacs-lisp :tangle yes
@@ -89,10 +91,42 @@ go install github.com/Gelio/go-global-update@latest
 
 #+end_src
 
-** Name and Email
+** GC
 
 #+begin_src emacs-lisp :tangle yes
 (setq native-compile-prune-cache t)
+#+end_src
+
+** Center Cursor
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! centered-cursor-mode)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! centered-cursor-mode)
+;; disable in terminal modes
+;; http://stackoverflow.com/a/6849467/519736
+;; also disable in Info mode, because it breaks going back with the backspace key
+(define-global-minor-mode ha-global-centered-cursor-mode centered-cursor-mode
+  (lambda ()
+    (when (not (memq major-mode
+                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode)))
+      (centered-cursor-mode))))
+(ha-global-centered-cursor-mode 1)
+#+end_src
+
+** Beacon
+
+Flash cursor big movements
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! beacon)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! beacon)
+(beacon-mode 1)
 #+end_src
 
 ** Transparency
@@ -475,7 +509,6 @@ Some diagrams need this config for text to appear within them
         simplenote2-directory "~/org/todo"))
 #+end_src
 
-
 * LSP
 ** unpin lsp
 
@@ -600,6 +633,27 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
 #+end_src
+
+** Tailwindcss
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! lsp-tailwindcss)
+#+end_src
+
+** Prisma
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! prisma-mode)
+#+end_src
+
 * AI-powered completion
 
 ** Codeium
