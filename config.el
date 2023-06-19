@@ -12,7 +12,7 @@
 (define-global-minor-mode ha-global-centered-cursor-mode centered-cursor-mode
   (lambda ()
     (when (not (memq major-mode
-                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode)))
+                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode 'vterm-mode)))
       (centered-cursor-mode))))
 (ha-global-centered-cursor-mode 1)
 
@@ -334,7 +334,7 @@
 ;; For tsx files.
 (add-hook 'tsx-ts-mode-hook #'setup-tide-mode)
 
-(use-package! lsp-tailwindcss)
+;; (use-package! lsp-tailwindcss)
 
 (use-package! prisma-mode)
 

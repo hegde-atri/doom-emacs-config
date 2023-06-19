@@ -111,7 +111,7 @@ go install github.com/Gelio/go-global-update@latest
 (define-global-minor-mode ha-global-centered-cursor-mode centered-cursor-mode
   (lambda ()
     (when (not (memq major-mode
-                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode)))
+                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode 'vterm-mode)))
       (centered-cursor-mode))))
 (ha-global-centered-cursor-mode 1)
 #+end_src
@@ -637,11 +637,11 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 ** Tailwindcss
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+;; (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package! lsp-tailwindcss)
+;; (use-package! lsp-tailwindcss)
 #+end_src
 
 ** Prisma
