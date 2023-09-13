@@ -25,17 +25,13 @@
 
 (package! prettier)
 
-(package! tide)
-
-;; (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 
 (package! svelte-mode)
 
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 
 (package! yuck-mode)
-
-;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 
 (package! copilot
   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
