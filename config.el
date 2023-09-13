@@ -19,8 +19,16 @@
 (use-package! beacon)
 (beacon-mode 1)
 
-(set-frame-parameter nil 'alpha-background 50) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 50)) ; For all new frames henceforth
+(set-frame-parameter nil 'alpha-background 70)
+(add-to-list 'default-frame-alist '(alpha-background . 70))
+
+(defun ha/toggle-window-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-transparency 75))
+    (pcase (frame-parameter nil 'alpha-background)
+      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
+      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (defun ha/transparency-round (val)
   "Round VAL to the nearest tenth of an integer."
@@ -86,8 +94,8 @@
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
+(setq shell-file-name "/bin/sh")
+(setq-default shell-file-name "/bin/sh")
 (setenv "SHELL" shell-file-name)
 
 (map! :leader
@@ -336,7 +344,11 @@
 
 ;; (use-package! lsp-tailwindcss)
 
+(use-package! svelte-mode)
+
 (use-package! prisma-mode)
+
+(use-package! yuck-mode)
 
 ;; we recommend using use-package to organize your init.el
 ;; (use-package codeium

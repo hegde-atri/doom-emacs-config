@@ -29,7 +29,11 @@
 
 ;; (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 
+(package! svelte-mode)
+
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
+
+(package! yuck-mode)
 
 ;; (package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 

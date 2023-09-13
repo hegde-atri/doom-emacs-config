@@ -51,7 +51,9 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#prettier][Prettier]]
   - [[#typescript][Typescript]]
   - [[#tailwindcss][Tailwindcss]]
+  - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
+  - [[#prisma-1][Prisma]]
 - [[#ai-powered-completion][AI-powered completion]]
   - [[#codeium][Codeium]]
   - [[#github-copilot][Github copilot]]
@@ -132,8 +134,16 @@ Flash cursor big movements
 ** Transparency
 
 #+begin_src emacs-lisp :tangle yes
-(set-frame-parameter nil 'alpha-background 50) ; For current frame
-(add-to-list 'default-frame-alist '(alpha-background . 50)) ; For all new frames henceforth
+(set-frame-parameter nil 'alpha-background 70)
+(add-to-list 'default-frame-alist '(alpha-background . 70))
+
+(defun ha/toggle-window-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-transparency 75))
+    (pcase (frame-parameter nil 'alpha-background)
+      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
+      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (defun ha/transparency-round (val)
   "Round VAL to the nearest tenth of an integer."
@@ -164,7 +174,6 @@ Flash cursor big movements
 ** Doom fonts
 
 #+begin_src emacs-lisp :tangle yes
-
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12 :weight 'regular))
 #+end_src
@@ -241,13 +250,12 @@ Making it so that we go to next visual line in evil mode.
 ** Shell
 
 #+begin_src emacs-lisp :tangle yes
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
+(setq shell-file-name "/bin/sh")
+(setq-default shell-file-name "/bin/sh")
 (setenv "SHELL" shell-file-name)
 #+end_src
 
 * Keybinds
-
 ** Replacing defaults
 
 *** Switch buffer
@@ -644,6 +652,16 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 ;; (use-package! lsp-tailwindcss)
 #+end_src
 
+** Svelte
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! svelte-mode)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! svelte-mode)
+#+end_src
+
 ** Prisma
 
 #+begin_src emacs-lisp :tangle packages.el
@@ -652,6 +670,16 @@ TIDE. Remember to have a tsconfig file. ~typscript-language-server~ needs to be 
 
 #+begin_src emacs-lisp :tangle yes
 (use-package! prisma-mode)
+#+end_src
+
+** Prisma
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! yuck-mode)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! yuck-mode)
 #+end_src
 
 * AI-powered completion
