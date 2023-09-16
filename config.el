@@ -268,6 +268,8 @@
   (setq lsp-ui-doc-show-with-cursor nil
         lsp-ui-doc-show-with-mouse t))
 
+(setq projectile-project-search-path '("~/repos/"))
+
 (use-package! evil-nerd-commenter
   :init (evilnc-default-hotkeys))
 
@@ -319,7 +321,7 @@
 
 (use-package! prettier)
 
-(use-package! lsp-tailwindcss)
+;; (use-package! lsp-tailwindcss)
 
 (use-package! svelte-mode)
 

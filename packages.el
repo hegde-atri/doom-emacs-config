@@ -25,7 +25,7 @@
 
 (package! prettier)
 
-(package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+;; (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 
 (package! svelte-mode)
 
