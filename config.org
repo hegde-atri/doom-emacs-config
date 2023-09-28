@@ -45,9 +45,11 @@ I manage my notes using org-roam. Here is a screenshot of my workflow. I have Em
   - [[#simple-notes][Simple notes]]
 - [[#lsp][LSP]]
   - [[#unpin-lsp][unpin lsp]]
+  - [[#company][company]]
   - [[#projectile][Projectile]]
   - [[#evil-nerd-commentor][Evil nerd commentor]]
   - [[#rust][Rust]]
+  - [[#python][Python]]
   - [[#astro][Astro]]
   - [[#prettier][Prettier]]
   - [[#tailwindcss][Tailwindcss]]
@@ -526,9 +528,17 @@ Some diagrams need this config for text to appear within them
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
+(setq lsp-diagnostics-provider :auto)
 (after! lsp-ui
-  (setq lsp-ui-doc-show-with-cursor nil
+  (setq lsp-ui-doc-show-with-cursor t
         lsp-ui-doc-show-with-mouse t))
+#+end_src
+
+** company
+
+#+begin_src emacs-lisp :tangle yes
+(setq company-idle-delay 0.1
+      company-minimum-prefix-length 1)
 #+end_src
 
 ** Projectile
@@ -600,6 +610,13 @@ at the top level of DIRECTORY."
   (with-eval-after-load 'dap-mode
     (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
     (dap-auto-configure-mode +1))
+#+end_src
+
+** Python
+
+#+begin_src emacs-lisp :tangle yes
+(setq lsp-pyls-plugins-pylint-enabled nil)
+(setq-default lsp-pyls-configuration-sources ["flake8"])
 #+end_src
 
 ** Astro

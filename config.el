@@ -264,9 +264,13 @@
         simplenote2-markdown-notes-mode "markdown-mode"
         simplenote2-directory "~/org/todo"))
 
+(setq lsp-diagnostics-provider :auto)
 (after! lsp-ui
-  (setq lsp-ui-doc-show-with-cursor nil
+  (setq lsp-ui-doc-show-with-cursor t
         lsp-ui-doc-show-with-mouse t))
+
+(setq company-idle-delay 0.1
+      company-minimum-prefix-length 1)
 
 (setq projectile-project-search-path '("~/repos"))
 ;; Fix non-recursive discovery
@@ -319,6 +323,9 @@ at the top level of DIRECTORY."
   (with-eval-after-load 'dap-mode
     (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
     (dap-auto-configure-mode +1))
+
+(setq lsp-pyls-plugins-pylint-enabled nil)
+(setq-default lsp-pyls-configuration-sources ["flake8"])
 
 (define-derived-mode astro-mode web-mode "astro")
 (setq auto-mode-alist
