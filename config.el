@@ -19,16 +19,16 @@
 (use-package! beacon)
 (beacon-mode 1)
 
-(set-frame-parameter nil 'alpha-background 70)
-(add-to-list 'default-frame-alist '(alpha-background . 70))
+;; (set-frame-parameter nil 'alpha-background 70)
+;; (add-to-list 'default-frame-alist '(alpha-background . 70))
 
-(defun ha/toggle-window-transparency ()
-  "Toggle transparency."
-  (interactive)
-  (let ((alpha-transparency 75))
-    (pcase (frame-parameter nil 'alpha-background)
-      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
-      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
+;; (defun ha/toggle-window-transparency ()
+;;   "Toggle transparency."
+;;   (interactive)
+;;   (let ((alpha-transparency 75))
+;;     (pcase (frame-parameter nil 'alpha-background)
+;;       (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
+;;       (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (defun ha/transparency-round (val)
   "Round VAL to the nearest tenth of an integer."
@@ -121,12 +121,13 @@
 (defun ha/org-setup ()
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
-  ;; Enlarge latex preview
-  ;; (plist-put org-format-latex-options :scale 0.5)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.5))
+  (setq org-startup-with-inline-images t)
+  ;; latex preview
+  (plist-put org-format-latex-options :scale 1.5)
+  ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.2))
   (plist-put org-format-latex-options :background "Transparent")
-  (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
-)
+  ;; (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
+  )
 
 (defun ha/org-font-setup ()
   ;; Change font size of headings.
@@ -140,7 +141,7 @@
                   (org-level-8 . 1.05)))
     (set-face-attribute (car face) nil :font "Overpass" :weight 'medium :height (cdr face)))
 
-;; Fonts in org
+  ;; Fonts in org
   (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
   (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
@@ -156,17 +157,20 @@
 
 (after! org
   (setq
-        org-ellipsis " ▼ "
-        org-hide-emphasis-markers t
-        ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
-        org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
-        ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
-))
+   org-ellipsis " ▼ "
+   org-hide-emphasis-markers t
+   ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
+   org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
+   ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+   )
+  )
 
 ;; writeroom mode bydefault for org roam buffers.
 (add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Keep modeline in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
+
+(plist-put org-format-latex-options :scale 1.5)
 
 (after! org
   (setq org-roam-directory "~/org/roam")
@@ -264,13 +268,14 @@
         simplenote2-markdown-notes-mode "markdown-mode"
         simplenote2-directory "~/org/todo"))
 
-(setq lsp-diagnostics-provider :auto)
+;; (setq lsp-diagnostics-provider :auto)
 (after! lsp-ui
   (setq lsp-ui-doc-show-with-cursor t
-        lsp-ui-doc-show-with-mouse t))
+        lsp-ui-doc-show-with-mouse t)
+  )
 
-(setq company-idle-delay 0.1
-      company-minimum-prefix-length 1)
+;; (setq company-idle-delay 0.1
+      ;; company-minimum-prefix-length 1)
 
 (setq projectile-project-search-path '("~/repos"))
 ;; Fix non-recursive discovery
@@ -299,30 +304,30 @@ at the top level of DIRECTORY."
     (lsp-rust-analyzer-server-display-inlay-hints t)
 )
 
-(setq dap-cpptools-extension-version "1.5.1")
+;; (setq dap-cpptools-extension-version "1.5.1")
 
-  (with-eval-after-load 'lsp-rust
-    (require 'dap-cpptools))
+;;   (with-eval-after-load 'lsp-rust
+;;     (require 'dap-cpptools))
 
-  (with-eval-after-load 'dap-cpptools
-    ;; Add a template specific for debugging Rust programs.
-    ;; It is used for new projects, where I can M-x dap-edit-debug-template
-    (dap-register-debug-template "Rust::CppTools Run Configuration"
-                                 (list :type "cppdbg"
-                                       :request "launch"
-                                       :name "Rust::Run"
-                                       :MIMode "gdb"
-                                       :miDebuggerPath "rust-gdb"
-                                       :environment []
-                                       :program "${workspaceFolder}/target/debug/hello / replace with binary"
-                                       :cwd "${workspaceFolder}"
-                                       :console "external"
-                                       :dap-compilation "cargo build"
-                                       :dap-compilation-dir "${workspaceFolder}")))
+;;   (with-eval-after-load 'dap-cpptools
+;;     ;; Add a template specific for debugging Rust programs.
+;;     ;; It is used for new projects, where I can M-x dap-edit-debug-template
+;;     (dap-register-debug-template "Rust::CppTools Run Configuration"
+;;                                  (list :type "cppdbg"
+;;                                        :request "launch"
+;;                                        :name "Rust::Run"
+;;                                        :MIMode "gdb"
+;;                                        :miDebuggerPath "rust-gdb"
+;;                                        :environment []
+;;                                        :program "${workspaceFolder}/target/debug/hypr-helper"
+;;                                        :cwd "${workspaceFolder}"
+;;                                        :console "external"
+;;                                        :dap-compilation "cargo build"
+;;                                        :dap-compilation-dir "${workspaceFolder}")))
 
-  (with-eval-after-load 'dap-mode
-    (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
-    (dap-auto-configure-mode +1))
+;;   (with-eval-after-load 'dap-mode
+;;     (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
+;;     (dap-auto-configure-mode +1))
 
 (setq lsp-pyls-plugins-pylint-enabled nil)
 (setq-default lsp-pyls-configuration-sources ["flake8"])
@@ -345,8 +350,6 @@ at the top level of DIRECTORY."
 
 (use-package! prettier)
 
-;; (use-package! lsp-tailwindcss)
-
 (use-package! svelte-mode)
 
 (use-package! prisma-mode)
@@ -354,10 +357,10 @@ at the top level of DIRECTORY."
 (use-package! yuck-mode)
 
 ;; accept completion from copilot and fallback to company
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+;; (use-package! copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :bind (:map copilot-completion-map
+;;               ("<tab>" . 'copilot-accept-completion)
+;;               ("TAB" . 'copilot-accept-completion)
+;;               ("C-TAB" . 'copilot-accept-completion-by-word)
+;;               ("C-<tab>" . 'copilot-accept-completion-by-word)))

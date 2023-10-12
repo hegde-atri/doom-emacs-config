@@ -25,7 +25,7 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (ivy +fuzzy +icons +prescient)               ; a search engine for love and life
-       ;;(vertico +icons)           ; the search engine of the future
+       ;; (vertico +icons)           ; the search engine of the future
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -81,8 +81,8 @@
 
        :checkers
        (syntax +childframe)              ; tasing you for every semicolon you forget
-       ;;(spell +flyspell) ; tasing you for misspelling mispelling
-       ;;grammar           ; tasing grammar mistake every you make
+       (spell +aspell) ; tasing you for misspelling mispelling
+       ;; grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible

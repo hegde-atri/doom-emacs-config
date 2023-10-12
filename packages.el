@@ -19,13 +19,13 @@
 
 (package! simplenote2)
 
-(unpin! lsp-mode)
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t
+        lsp-auto-guess-root nil))
 
-
+(package! evil-nerd-commenter)
 
 (package! prettier)
-
-;; (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 
 (package! svelte-mode)
 
@@ -33,5 +33,5 @@
 
 (package! yuck-mode)
 
-(package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+;; (package! copilot
+;;   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
