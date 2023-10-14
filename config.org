@@ -10,6 +10,7 @@ GNU Emacs is not just a text editor, it’s the ultimate tool for productivity. 
 I manage my notes using org-roam. Here is a screenshot of my workflow. I have Emacs, org-roam-ui and ncmpcpp open.
 
 [[./note-taking.png]]
+
 * Table of Contents :TOC:
 - [[#preface][Preface]]
   - [[#note-taking][Note taking]]
@@ -351,6 +352,8 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
    org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
    ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
    )
+  (ha/org-setup)
+  (ha/org-font-setup)
   )
 
 ;; writeroom mode bydefault for org roam buffers.

@@ -163,6 +163,8 @@
    org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
    ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
    )
+  (ha/org-setup)
+  (ha/org-font-setup)
   )
 
 ;; writeroom mode bydefault for org roam buffers.
