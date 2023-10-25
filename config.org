@@ -216,13 +216,14 @@ Flash cursor big movements
   (doom-modeline-env-version t)
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
-  (doom-modeline-gnus-timer nil))
+  (doom-modeline-gnus-timer nil)
+  (setq display-time-mode t))
 #+end_src
 
 ** Doom dashboard
 
 #+begin_src emacs-lisp :tangle yes
-(setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
+(setq fancy-splash-image "~/.config/doom/vagabond.png")
 #+end_src
 
 ** Line numbers
@@ -344,6 +345,11 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
   (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
   (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
 
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
+;; Keep modeline in writeroom mode.
+(add-hook 'org-mode-hook #'buffer-face-mode)
+
 (after! org
   (setq
    org-ellipsis " ▼ "
@@ -353,13 +359,12 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
    ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
    )
   (ha/org-setup)
-  (ha/org-font-setup)
-  )
 
-;; writeroom mode bydefault for org roam buffers.
-(add-hook 'org-mode-hook #'+zen/toggle t)
-;; Keep modeline in writeroom mode.
-(add-hook 'org-mode-hook #'buffer-face-mode)
+  (after! org
+    ;; fix color handling in org-preview-latex-fragment
+    (let ((dvipng--plist (alist-get 'dvipng org-preview-latex-process-alist)))
+      (plist-put dvipng--plist :use-xcolor t)
+      (plist-put dvipng--plist :image-converter '("dvipng -D %D -T tight -o %O %f"))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -369,7 +374,6 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
 ** Org roam
 
 #+begin_src emacs-lisp :tangle yes
-(after! org
   (setq org-roam-directory "~/org/roam")
   (setq org-roam-capture-templates
     '(("d" "default" plain
@@ -574,6 +578,9 @@ at the top level of DIRECTORY."
              (projectile-add-known-project (projectile-project-root))))))
      subdirs)))
 #+end_src
+
+#+RESULTS:
+: projectile-discover-projects-in-directory
 
 ** Evil nerd commenter
 

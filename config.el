@@ -82,9 +82,10 @@
   (doom-modeline-env-version t)
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
-  (doom-modeline-gnus-timer nil))
+  (doom-modeline-gnus-timer nil)
+  (setq display-time-mode t))
 
-(setq fancy-splash-image "~/.config/doom/doom-emacs-dash.png")
+(setq fancy-splash-image "~/.config/doom/vagabond.png")
 
 (setq display-line-numbers-type 'relative)
 
@@ -155,6 +156,11 @@
   (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
   (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
 
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
+;; Keep modeline in writeroom mode.
+(add-hook 'org-mode-hook #'buffer-face-mode)
+
 (after! org
   (setq
    org-ellipsis " ▼ "
@@ -164,40 +170,38 @@
    ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
    )
   (ha/org-setup)
-  (ha/org-font-setup)
-  )
 
-;; writeroom mode bydefault for org roam buffers.
-(add-hook 'org-mode-hook #'+zen/toggle t)
-;; Keep modeline in writeroom mode.
-(add-hook 'org-mode-hook #'buffer-face-mode)
+  (after! org
+    ;; fix color handling in org-preview-latex-fragment
+    (let ((dvipng--plist (alist-get 'dvipng org-preview-latex-process-alist)))
+      (plist-put dvipng--plist :use-xcolor t)
+      (plist-put dvipng--plist :image-converter '("dvipng -D %D -T tight -o %O %f"))))
 
 (plist-put org-format-latex-options :scale 1.5)
 
-(after! org
-  (setq org-roam-directory "~/org/roam")
-  (setq org-roam-capture-templates
-    '(("d" "default" plain
-       "%?"
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+startup: latexpreview\n")
-       :unnarrowed t)
-      ("m" "module" plain
-       ;; (file "<path to template>")
-       "\n* Module details\n\n- %^{Module code}\n- Semester: %^{Semester}\n\n* %?"
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
-       :unnarrowed t)
-      ("b" "book notes" plain
-       "\n* Source\n\n- Author: %^{Author}\n- Title: ${title}\n- Year: %^{Year}\n\n%?"
-       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
-       :unnarrowed t)
-    )
+(setq org-roam-directory "~/org/roam")
+(setq org-roam-capture-templates
+  '(("d" "default" plain
+     "%?"
+     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+startup: latexpreview\n")
+     :unnarrowed t)
+    ("m" "module" plain
+     ;; (file "<path to template>")
+     "\n* Module details\n\n- %^{Module code}\n- Semester: %^{Semester}\n\n* %?"
+     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
+     :unnarrowed t)
+    ("b" "book notes" plain
+     "\n* Source\n\n- Author: %^{Author}\n- Title: ${title}\n- Year: %^{Year}\n\n%?"
+     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
+     :unnarrowed t)
   )
-  (setq org-roam-dailies-capture-templates
-    '(("d" "default" entry "* %<%H:%M>: %?"
-       :ifnew (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-    )
+)
+(setq org-roam-dailies-capture-templates
+  '(("d" "default" entry "* %<%H:%M>: %?"
+     :ifnew (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
   )
-  (org-roam-setup))
+)
+(org-roam-setup))
 
 (setq
    ;; org-fancy-priorities-list '("❗" "⚠" "👆")
