@@ -313,7 +313,7 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
   (setq org-hide-emphasis-markers t)
   (setq org-startup-with-inline-images t)
   ;; latex preview
-  (plist-put org-format-latex-options :scale 1.5)
+  (plist-put org-format-latex-options :scale 0.5)
   ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.2))
   (plist-put org-format-latex-options :background "Transparent")
   ;; (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
@@ -368,7 +368,7 @@ I also install org-appear, to reveal emphasis markers when moving the cursor ove
 #+end_src
 
 #+begin_src emacs-lisp
-(plist-put org-format-latex-options :scale 1.5)
+(plist-put org-format-latex-options :scale 0.5)
 #+end_src
 
 ** Org roam

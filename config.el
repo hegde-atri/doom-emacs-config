@@ -124,7 +124,7 @@
   (setq org-hide-emphasis-markers t)
   (setq org-startup-with-inline-images t)
   ;; latex preview
-  (plist-put org-format-latex-options :scale 1.5)
+  (plist-put org-format-latex-options :scale 0.5)
   ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.2))
   (plist-put org-format-latex-options :background "Transparent")
   ;; (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
@@ -177,7 +177,7 @@
       (plist-put dvipng--plist :use-xcolor t)
       (plist-put dvipng--plist :image-converter '("dvipng -D %D -T tight -o %O %f"))))
 
-(plist-put org-format-latex-options :scale 1.5)
+(plist-put org-format-latex-options :scale 0.5)
 
 (setq org-roam-directory "~/org/roam")
 (setq org-roam-capture-templates
