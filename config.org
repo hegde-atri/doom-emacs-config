@@ -6,8 +6,8 @@
 
 ** Screenshots
 
-[[./org.png][Org mode]]
-[[./note-taking.png][Note taking]]
+[[./org.png]]
+[[./note-taking.png]]
 
 * Table of Contents :TOC:
 - [[#preface][Preface]]
