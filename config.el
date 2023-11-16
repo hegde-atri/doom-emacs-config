@@ -1,61 +1,42 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
 (setq user-full-name "Atri Hegde"
-      user-mail-address "atri@hegdeatri.com")
+      user-mail-address "me@hegdeatri.com")
 
-(setq native-compile-prune-cache t)
+(setq display-line-numbers-type 'relative)
 
-(use-package! centered-cursor-mode)
-;; disable in terminal modes
-;; http://stackoverflow.com/a/6849467/519736
-;; also disable in Info mode, because it breaks going back with the backspace key
-(define-global-minor-mode ha-global-centered-cursor-mode centered-cursor-mode
-  (lambda ()
-    (when (not (memq major-mode
-                     (list 'Info-mode 'term-mode 'eshell-mode 'shell-mode 'erc-mode 'vterm-mode)))
-      (centered-cursor-mode))))
-(ha-global-centered-cursor-mode 1)
+(setq scroll-margin 7)
 
-(use-package! beacon)
-(beacon-mode 1)
+(defun my-set-scroll-margin ()
+  "Set scroll-margin based on the current major mode."
+  (setq-local scroll-margin
+              (cond ((derived-mode-p 'Info-mode) 0)
+                    ((derived-mode-p 'term-mode) 0)
+                    ((derived-mode-p 'eshell-mode) 0)
+                    ((derived-mode-p 'shell-mode) 0)
+                    ((derived-mode-p 'erc-mode) 0)
+                    ((derived-mode-p 'vterm-mode) 0)
+                    (t 7))))
 
-;; (set-frame-parameter nil 'alpha-background 70)
-;; (add-to-list 'default-frame-alist '(alpha-background . 70))
+(add-hook 'after-change-major-mode-hook #'my-set-scroll-margin)
 
-;; (defun ha/toggle-window-transparency ()
-;;   "Toggle transparency."
-;;   (interactive)
-;;   (let ((alpha-transparency 75))
-;;     (pcase (frame-parameter nil 'alpha-background)
-;;       (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
-;;       (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-symbol-font' -- for symbols
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(defun ha/transparency-round (val)
-  "Round VAL to the nearest tenth of an integer."
-  (/ (round (* 10 val)) 10.0))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
+      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
 
-(defun ha/increase-frame-alpha-background ()
-  "Increase current frame’s alpha background."
-  (interactive)
-  (set-frame-parameter nil
-                       'alpha-background
-                       (ha/transparency-round
-                        (min 1.0
-                             (+ (frame-parameter nil 'alpha-background) 0.1))))
-  (message "%s" (frame-parameter nil 'alpha-background)))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
 
-(defun ha/decrease-frame-alpha-background ()
-  "Decrease current frame’s alpha background."
-  (interactive)
-  (set-frame-parameter nil
-                       'alpha-background
-                       (ha/transparency-round
-                        (max 0.0
-                             (- (frame-parameter nil 'alpha-background) 0.1))))
-  (message "%s" (frame-parameter nil 'alpha-background)))
-
-(setq doom-font (font-spec :family "MonoLisa Nerd Font" :size 15 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12 :weight 'regular))
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
 
 (setq doom-theme 'doom-palenight)
 
@@ -85,24 +66,6 @@
   (doom-modeline-gnus-timer nil)
   (setq display-time-mode t))
 
-(setq fancy-splash-image "~/.config/doom/vagabond.png")
-
-(setq display-line-numbers-type 'relative)
-
-(add-hook! 'rainbow-mode-hook
-  (hl-line-mode (if rainbow-mode -1 +1)))
-
-(evil-global-set-key 'motion "j" 'evil-next-visual-line)
-(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
-(setenv "SHELL" shell-file-name)
-
-(map! :leader
-      (:prefix ("b" . "buffer")
-       :desc "switch buffer"          "b" #'(lambda () (interactive) (counsel-switch-buffer))))
-
 (map! :leader
       (:prefix ("=" . "open config")
        :desc "Hyprland"      "h" #'(lambda () (interactive) (find-file "~/.config/hypr/hypr.org"))
@@ -111,73 +74,47 @@
        :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
        :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
 
-(map! :leader
-      (:prefix ("p" . "open config")
-       (:prefix ("m" . "make tasks")
-       :desc "run-last"       "r" #'(lambda () (interactive) (+make/run-last))
-       :desc "run"          "R" #'(lambda () (interactive) (+make/run)))))
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 
 (setq org-directory "~/org/")
 
-(defun ha/org-setup ()
+(after! org
   (setq org-log-done 'time)
   (setq org-hide-emphasis-markers t)
   (setq org-startup-with-inline-images t)
-  ;; latex preview
-  (plist-put org-format-latex-options :scale 0.5)
-  ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 0.2))
-  (plist-put org-format-latex-options :background "Transparent")
-  ;; (setq org-format-latex-options (plist-put org-format-latex-options :background "Transparent"))
-  )
-
-(defun ha/org-font-setup ()
-  ;; Change font size of headings.
-  (dolist (face '((org-level-1 . 1.5)
-                  (org-level-2 . 1.4)
-                  (org-level-3 . 1.3)
-                  (org-level-4 . 1.25)
-                  (org-level-5 . 1.2)
-                  (org-level-6 . 1.15)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.05)))
-    (set-face-attribute (car face) nil :font "Overpass" :weight 'medium :height (cdr face)))
-
-  ;; Fonts in org
-  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-  (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
-
-;; writeroom mode bydefault for org roam buffers.
-(add-hook 'org-mode-hook #'+zen/toggle t)
-;; Keep modeline in writeroom mode.
-(add-hook 'org-mode-hook #'buffer-face-mode)
-
-(after! org
   (setq
    org-ellipsis " ▼ "
    org-hide-emphasis-markers t
    ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
-   org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
-   ;; org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+   ;; org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
+   org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
    )
-  (ha/org-setup)
 
-  (after! org
-    ;; fix color handling in org-preview-latex-fragment
-    (let ((dvipng--plist (alist-get 'dvipng org-preview-latex-process-alist)))
-      (plist-put dvipng--plist :use-xcolor t)
-      (plist-put dvipng--plist :image-converter '("dvipng -D %D -T tight -o %O %f"))))
+  ;; after org continues
 
-(plist-put org-format-latex-options :scale 0.5)
+(dolist (face '((org-level-1 . 1.2)
+                (org-level-2 . 1.1)
+                ))
+  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+(set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
+(set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+(set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+
+(setq org-pretty-entities t)
+
+;; (plist-put org-format-latex-options :scale 0.5)
+(setq org-highlight-latex-and-related '(latex))
+(plist-put org-format-latex-options :background "Transparent")
 
 (setq org-roam-directory "~/org/roam")
 (setq org-roam-capture-templates
@@ -201,55 +138,14 @@
      :ifnew (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
   )
 )
-(org-roam-setup))
+;; (org-roam-db-autosync-enable)
 
-(setq
-   ;; org-fancy-priorities-list '("❗" "⚠" "👆")
-   org-fancy-priorities-list '("🟥" "🟧" "🟨")
-   ;;org-priority-faces
-   ;;'((?A :foreground "#ff6c6b" :weight bold)
-   ;;  (?B :foreground "#98be65" :weight bold)
-   ;;  (?C :foreground "#c678dd" :weight bold))
-   org-agenda-block-separator 8411)
-
-(setq org-agenda-custom-commands
-      '(("v" "A better agenda view"
-         ((tags "PRIORITY=\"A\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
-          (tags "PRIORITY=\"B\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
-          (tags "PRIORITY=\"C\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
-          (tags "customtag"
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Tasks marked with customtag:")))
-
-          (agenda "")
-          (alltodo "")))))
-
-(use-package! org-auto-tangle
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode)
-  :config
-  (setq org-auto-tangle-default t)
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
+;; Keep fonts in writeroom mode.
+(add-hook 'org-mode-hook #'buffer-face-mode)
+;; after org ends
 )
-
-(org-babel-do-load-languages
-    'org-babel-load-languages
-    '((ledger . t)))
-
-(after! ob-mermaid
-  :config
-  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
-
-(org-babel-do-load-languages
-    'org-babel-load-languages
-    '((mermaid . t)
-      (scheme . t)
-      (ledger . t)))
 
 (use-package! websocket
     :after org-roam)
@@ -259,123 +155,24 @@
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
 ;;         a hookable mode anymore, you're advised to pick something yourself
 ;;         if you don't care about startup time, use
-;;    :hook (after-init . org-roam-ui-mode)
+;;  :hook (after-init . org-roam-ui-mode)
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
-(use-package! simplenote2
-  :defer t
-  :config
-  (setq simplenote2-email "iamatrihegde@gmail.com"
-        simplenote2-password nil
-        simplenote2-markdown-notes-mode "markdown-mode"
-        simplenote2-directory "~/org/todo"))
+(setq shell-file-name "/bin/bash")
+(setq-default shell-file-name "/bin/bash")
+(setenv "SHELL" shell-file-name)
 
-;; (setq lsp-diagnostics-provider :auto)
-(after! lsp-ui
-  (setq lsp-ui-doc-show-with-cursor t
-        lsp-ui-doc-show-with-mouse t)
-  )
-
-;; (setq company-idle-delay 0.1
-      ;; company-minimum-prefix-length 1)
-
-(setq projectile-project-search-path '("~/repos"))
-;; Fix non-recursive discovery
-(defun projectile-discover-projects-in-directory (directory)
-  "Discover any projects in DIRECTORY and add them to the projectile cache.
-This function is not recursive and only adds projects with roots
-at the top level of DIRECTORY."
-  (interactive
-   (list (read-directory-name "Starting directory: ")))
-  (let ((subdirs (directory-files directory t)))
-    (mapcar
-     (lambda (dir)
-       (when (and (file-directory-p dir)
-                  (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir)
-               (projectile-cached-project-root dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
-     subdirs)))
-
-(use-package! evil-nerd-commenter
-  :init (evilnc-default-hotkeys))
-
-(use-package! lsp
-    :custom
-    (lsp-rust-analyzer-server-display-inlay-hints t)
-)
-
-;; (setq dap-cpptools-extension-version "1.5.1")
-
-;;   (with-eval-after-load 'lsp-rust
-;;     (require 'dap-cpptools))
-
-;;   (with-eval-after-load 'dap-cpptools
-;;     ;; Add a template specific for debugging Rust programs.
-;;     ;; It is used for new projects, where I can M-x dap-edit-debug-template
-;;     (dap-register-debug-template "Rust::CppTools Run Configuration"
-;;                                  (list :type "cppdbg"
-;;                                        :request "launch"
-;;                                        :name "Rust::Run"
-;;                                        :MIMode "gdb"
-;;                                        :miDebuggerPath "rust-gdb"
-;;                                        :environment []
-;;                                        :program "${workspaceFolder}/target/debug/hypr-helper"
-;;                                        :cwd "${workspaceFolder}"
-;;                                        :console "external"
-;;                                        :dap-compilation "cargo build"
-;;                                        :dap-compilation-dir "${workspaceFolder}")))
-
-;;   (with-eval-after-load 'dap-mode
-;;     (setq dap-default-terminal-kind "integrated") ;; Make sure that terminal programs open a term for I/O in an Emacs buffer
-;;     (dap-auto-configure-mode +1))
-
-(setq lsp-pyls-plugins-pylint-enabled nil)
-(setq-default lsp-pyls-configuration-sources ["flake8"])
-
-(define-derived-mode astro-mode web-mode "astro")
-(setq auto-mode-alist
-      (append '((".*\\.astro\\'" . astro-mode))
-              auto-mode-alist))
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-               '(astro-mode . "astro"))
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
-                    :activation-fn (lsp-activate-on "astro")
-                    :server-id 'astro-ls)))
-
-(add-hook! astro-mode #'lsp-deferred)
-
-(use-package! prettier)
-
-(use-package! svelte-mode)
-
-(use-package! prisma-mode)
-
-(use-package! yuck-mode)
+(map! :leader "b c" nil)
 
 (use-package! ellama
   :init
   (setopt ellama-language "English")
   (require 'llm-ollama)
   (setopt ellama-provider
-          (llm-ollama-host "10.27.27.100")
+          ;; (llm-ollama-host "10.27.27.100")
           (make-llm-ollama
            :chat-model "zephyr" :embedding-model "zephyr")))
-
-;; accept completion from copilot and fallback to company
-;; (use-package! copilot
-;;   :hook (prog-mode . copilot-mode)
-;;   :bind (:map copilot-completion-map
-;;               ("<tab>" . 'copilot-accept-completion)
-;;               ("TAB" . 'copilot-accept-completion)
-;;               ("C-TAB" . 'copilot-accept-completion-by-word)
-;;               ("C-<tab>" . 'copilot-accept-completion-by-word)))
