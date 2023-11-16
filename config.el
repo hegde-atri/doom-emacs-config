@@ -54,7 +54,7 @@
                              (- (frame-parameter nil 'alpha-background) 0.1))))
   (message "%s" (frame-parameter nil 'alpha-background)))
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
+(setq doom-font (font-spec :family "MonoLisa Nerd Font" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12 :weight 'regular))
 
 (setq doom-theme 'doom-palenight)
@@ -361,6 +361,15 @@ at the top level of DIRECTORY."
 (use-package! prisma-mode)
 
 (use-package! yuck-mode)
+
+(use-package! ellama
+  :init
+  (setopt ellama-language "English")
+  (require 'llm-ollama)
+  (setopt ellama-provider
+          (llm-ollama-host "10.27.27.100")
+          (make-llm-ollama
+           :chat-model "zephyr" :embedding-model "zephyr")))
 
 ;; accept completion from copilot and fallback to company
 ;; (use-package! copilot

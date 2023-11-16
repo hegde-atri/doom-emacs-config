@@ -2,6 +2,8 @@
 
 (package! beacon)
 
+(package! tao-theme)
+
 (unpin! doom-modeline)
 
 (package! org-appear
@@ -32,6 +34,8 @@
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 
 (package! yuck-mode)
+
+(package! ellama)
 
 ;; (package! copilot
 ;;   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
