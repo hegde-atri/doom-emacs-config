@@ -30,6 +30,7 @@
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
   - [[#org-roam-ui][Org roam ui]]
+  - [[#notebook-mode][Notebook mode]]
 - [[#general-1][General]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
@@ -276,6 +277,12 @@ General latex settings.
 
 #+end_src
 
+** Notebook mode
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! notebook-mode :recipe (:local-repo "lisp/notebook"))
+#+end_src
+
 * General
 #+begin_src emacs-lisp
 (setq shell-file-name "/bin/bash")
@@ -284,9 +291,11 @@ General latex settings.
 #+end_src
 
 * Keymaps
+
 Unbind [[kbd:][SPC w c]] as it is easy to misclick
+
 #+begin_src emacs-lisp
-(map! :leader "b c" nil)
+;; (map! :leader "w c" nil)
 #+end_src
 
 * LSP

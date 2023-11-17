@@ -166,7 +166,7 @@
 (setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)
 
-(map! :leader "b c" nil)
+;; (map! :leader "w c" nil)
 
 (use-package! ellama
   :init
