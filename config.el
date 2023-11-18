@@ -1,3 +1,5 @@
+;; (add-to-list 'load-path "~/.config/doom/scripts/")
+
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq user-full-name "Atri Hegde"
       user-mail-address "me@hegdeatri.com")
@@ -162,11 +164,29 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(load "/home/mizuuu/.config/doom/scripts/svg-tags.el")
+(require 'svg-tag-mode)
+
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(setq org-latex-listings 't)
+
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)
 
-;; (map! :leader "w c" nil)
+(map! :leader "w c" nil)
 
 (use-package! ellama
   :init

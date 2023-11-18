@@ -14,6 +14,7 @@
   - [[#screenshots][Screenshots]]
 - [[#packages-required][Packages required]]
   - [[#golang][GoLang]]
+- [[#sourcing-scripts][Sourcing scripts]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and email]]
   - [[#line-numbers][Line Numbers]]
@@ -31,9 +32,12 @@
   - [[#writeroom][Writeroom]]
   - [[#org-roam-ui][Org roam ui]]
   - [[#notebook-mode][Notebook mode]]
+  - [[#svg-tags][SVG Tags]]
+  - [[#perfecting-latex][Perfecting LaTeX]]
 - [[#general-1][General]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
+  - [[#prettier][Prettier]]
 - [[#llm][LLM]]
 
 * Packages required
@@ -53,6 +57,12 @@ go install golang.org/x/tools/cmd/gorename@latest
 go install golang.org/x/tools/cmd/guru@latest
 go install github.com/cweill/gotests/gotests@latest
 go install github.com/fatih/gomodifytags@latest
+#+end_src
+
+* Sourcing scripts
+
+#+begin_src emacs-lisp
+;; (add-to-list 'load-path "~/.config/doom/scripts/")
 #+end_src
 
 * User Interface
@@ -280,7 +290,45 @@ General latex settings.
 ** Notebook mode
 
 #+begin_src emacs-lisp :tangle packages.el
-(package! notebook-mode :recipe (:local-repo "lisp/notebook"))
+(package! svg-lib)
+;; (package! svg-tag-make :recipe (:repo "https://github.com/rougier/svg-tag-mode/" :files ("svg-tag-mode.el")))
+;; (package! svg-tag-mode :recipe (:local-repo "lisp/svg-tag-mode"))
+(package! svg-tag-mode)
+;; (package! notebook-mode :recipe (:local-repo "lisp/notebook"))
+#+end_src
+
+** SVG Tags
+
+Load our scripts for SVG Tags.
+
+#+begin_src emacs-lisp
+(load "/home/mizuuu/.config/doom/scripts/svg-tags.el")
+(require 'svg-tag-mode)
+#+end_src
+
+** Perfecting LaTeX
+
+Let's disable all of the default packages so we can customise it how /we/ want it.
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+
+Enable using =listings= for code highlighting.
+
+#+begin_src emacs-lisp
+(setq org-latex-listings 't)
 #+end_src
 
 * General
@@ -295,10 +343,17 @@ General latex settings.
 Unbind [[kbd:][SPC w c]] as it is easy to misclick
 
 #+begin_src emacs-lisp
-;; (map! :leader "w c" nil)
+(map! :leader "w c" nil)
 #+end_src
 
 * LSP
+** Prettier
+
+Have this installed, just in case I have a project that needs it.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! prettier)
+#+end_src
 
 * LLM
 
