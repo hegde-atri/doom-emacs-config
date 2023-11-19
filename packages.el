@@ -7,6 +7,8 @@
 (package! svg-tag-mode)
 ;; (package! notebook-mode :recipe (:local-repo "lisp/notebook"))
 
+(unpin! lsp-mode)
+
 (package! prettier)
 
 (package! ellama)

@@ -37,6 +37,7 @@
 - [[#general-1][General]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
+  - [[#typscript][Typscript]]
   - [[#prettier][Prettier]]
 - [[#llm][LLM]]
 
@@ -109,9 +110,9 @@ go install github.com/fatih/gomodifytags@latest
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
       doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
 
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
+;; (after! doom-themes
+;;   (setq doom-themes-enable-bold t
+;;         doom-themes-enable-italic t))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
@@ -347,6 +348,12 @@ Unbind [[kbd:][SPC w c]] as it is easy to misclick
 #+end_src
 
 * LSP
+** Typscript
+Temporarily unpin lsp as ts-ls has breaking changes
+#+begin_src emacs-lisp :tangle packages.el
+(unpin! lsp-mode)
+#+end_src
+
 ** Prettier
 
 Have this installed, just in case I have a project that needs it.

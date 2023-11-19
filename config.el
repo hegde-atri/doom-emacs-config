@@ -32,9 +32,9 @@
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
       doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
 
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
+;; (after! doom-themes
+;;   (setq doom-themes-enable-bold t
+;;         doom-themes-enable-italic t))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
