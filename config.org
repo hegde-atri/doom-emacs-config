@@ -402,7 +402,19 @@ Needs ~mmdc~ available.
 
 (org-babel-do-load-languages
     'org-babel-load-languages
-    '((mermaid . t)))
+    '((mermaid . t)
+      (schema . t)))
+#+end_src
+
+*** mermaid-mode
+I also keep =mermaid-mode= in case I am working with a more complex mermaid diagram.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! mermaid-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+;; (after! mermaid-mode)
 #+end_src
 
 * General

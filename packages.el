@@ -10,6 +10,8 @@
 
 (package! ob-mermaid)
 
+(package! mermaid-mode)
+
 (package! evil-tutor)
 
 (unpin! lsp-mode)

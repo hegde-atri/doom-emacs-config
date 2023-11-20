@@ -203,7 +203,10 @@
 
 (org-babel-do-load-languages
     'org-babel-load-languages
-    '((mermaid . t)))
+    '((mermaid . t)
+      (schema . t)))
+
+;; (after! mermaid-mode)
 
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
