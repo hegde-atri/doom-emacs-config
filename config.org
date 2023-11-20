@@ -4,6 +4,28 @@
 
 * Preface
 
+** Why Emacs?
+
+Emacs is not just a text-editor, instead it is a lisp interpreter.
+
+
+I was previously a poweruser of:
+- JetBrains IDE's
+- Visual Studio Code
+- Neovim (to some extent back in 2020)
+
+I use emacs to do almost everything. After using org-mode, everything else feels like a slouch, the power of org-mode is unparalleled.
+
+I am not saying emacs is the best and has no issues. It does have some irritating quirks, but the things it brings far outweight this.
+
+#+PLOT: title:"Comparison of different editors" transpose:yes type:radar min:0 max:5
+| Editor | Ease of use | Learning curve | Extensability | Versatility | Integrations | Performace |
+|--------+-------------+----------------+---------------+-------------+--------------+------------|
+| Emacs  |           3 |              4 |             5 |           5 |            5 |          4 |
+| Neovim |           4 |              3 |             4 |           5 |            4 |          5 |
+| VSCode |           5 |              1 |             3 |           3 |            3 |          3 |
+[[./comparison.png]]
+
 ** Screenshots
 
 [[./org.png]]
@@ -11,6 +33,7 @@
 
 * Table of Contents :TOC:
 - [[#preface][Preface]]
+  - [[#why-emacs][Why Emacs?]]
   - [[#screenshots][Screenshots]]
 - [[#packages-required][Packages required]]
   - [[#golang][GoLang]]
@@ -25,19 +48,22 @@
   - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil mode]]
 - [[#org-mode][Org mode]]
-  - [[#general][General]]
+  - [[#base-org-config][Base org config]]
   - [[#fonts-in-org][Fonts in Org]]
   - [[#latex-snippets][Latex snippets]]
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
   - [[#org-roam-ui][Org roam ui]]
-  - [[#notebook-mode][Notebook mode]]
   - [[#svg-tags][SVG Tags]]
+  - [[#notebook-mode][Notebook mode]]
   - [[#perfecting-latex][Perfecting LaTeX]]
-- [[#general-1][General]]
+- [[#general][General]]
+  - [[#evil-tutor][Evil tutor]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
   - [[#typscript][Typscript]]
+  - [[#svelte][Svelte]]
+  - [[#prisma][Prisma]]
   - [[#prettier][Prettier]]
 - [[#llm][LLM]]
 
@@ -172,7 +198,9 @@ go install github.com/fatih/gomodifytags@latest
 #+end_src
 
 * Org mode
-** General
+
+** Base org config
+
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
 
@@ -260,6 +288,8 @@ General latex settings.
 (add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Keep fonts in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
+;; Enable svg-tag-mode
+(add-hook 'org-mode-hook #'svg-tag-mode)
 ;; after org ends
 )
 #+end_src
@@ -288,23 +318,26 @@ General latex settings.
 
 #+end_src
 
-** Notebook mode
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! svg-lib)
-;; (package! svg-tag-make :recipe (:repo "https://github.com/rougier/svg-tag-mode/" :files ("svg-tag-mode.el")))
-;; (package! svg-tag-mode :recipe (:local-repo "lisp/svg-tag-mode"))
-(package! svg-tag-mode)
-;; (package! notebook-mode :recipe (:local-repo "lisp/notebook"))
-#+end_src
-
 ** SVG Tags
 
 Load our scripts for SVG Tags.
 
+#+begin_src emacs-lisp :tangle packages.el
+(package! svg-lib)
+(package! svg-tag-mode)
+#+end_src
+
 #+begin_src emacs-lisp
+(use-package! svg-lib
+  :init (add-hook 'after-setting-font-hook (lambda () (setq svg-lib-style-default (svg-lib-style-compute-default)))))
+
 (load "/home/mizuuu/.config/doom/scripts/svg-tags.el")
-(require 'svg-tag-mode)
+#+end_src
+
+** Notebook mode
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! notebook-mode :recipe (:local-repo "lisp/notebook"))
 #+end_src
 
 ** Perfecting LaTeX
@@ -326,17 +359,30 @@ Let's disable all of the default packages so we can customise it how /we/ want i
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+end_src
 
-Enable using =listings= for code highlighting.
+*** Using minted for code highlightings
 
 #+begin_src emacs-lisp
-(setq org-latex-listings 't)
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 
 * General
+
 #+begin_src emacs-lisp
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)
+#+end_src
+
+** Evil tutor
+
+I will finish it one day...
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! evil-tutor)
 #+end_src
 
 * Keymaps
@@ -347,11 +393,33 @@ Unbind [[kbd:][SPC w c]] as it is easy to misclick
 (map! :leader "w c" nil)
 #+end_src
 
+Bind [[kbd:][SPC b f]] to format buffer using lsp.
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "Format buffer" "f" #'lsp-format-buffer))
+#+end_src
+
 * LSP
+
 ** Typscript
+
 Temporarily unpin lsp as ts-ls has breaking changes
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! lsp-mode)
+#+end_src
+
+** Svelte
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! svelte-mode)
+#+end_src
+
+** Prisma
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 #+end_src
 
 ** Prettier

@@ -146,6 +146,8 @@
 (add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Keep fonts in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
+;; Enable svg-tag-mode
+(add-hook 'org-mode-hook #'svg-tag-mode)
 ;; after org ends
 )
 
@@ -164,8 +166,10 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
+(use-package! svg-lib
+  :init (add-hook 'after-setting-font-hook (lambda () (setq svg-lib-style-default (svg-lib-style-compute-default)))))
+
 (load "/home/mizuuu/.config/doom/scripts/svg-tags.el")
-(require 'svg-tag-mode)
 
 (with-eval-after-load 'ox-latex
 (add-to-list 'org-latex-classes
@@ -180,13 +184,21 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-(setq org-latex-listings 't)
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)
 
 (map! :leader "w c" nil)
+
+(map! :leader
+      (:prefix ("b" . "buffer")
+       :desc "Format buffer" "f" #'lsp-format-buffer))
 
 (use-package! ellama
   :init
