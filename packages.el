@@ -6,6 +6,10 @@
 
 (package! notebook-mode :recipe (:local-repo "lisp/notebook"))
 
+(package! org-auto-tangle)
+
+(package! ob-mermaid)
+
 (package! evil-tutor)
 
 (unpin! lsp-mode)

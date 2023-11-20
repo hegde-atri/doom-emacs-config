@@ -190,6 +190,21 @@
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t)
+)
+
+(after! ob-mermaid
+  :config
+  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
+
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((mermaid . t)))
+
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)

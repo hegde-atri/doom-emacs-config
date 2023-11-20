@@ -57,6 +57,8 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#svg-tags][SVG Tags]]
   - [[#notebook-mode][Notebook mode]]
   - [[#perfecting-latex][Perfecting LaTeX]]
+  - [[#org-auto-tangle][org-auto-tangle]]
+  - [[#ob-mermaid][ob-mermaid]]
 - [[#general][General]]
   - [[#evil-tutor][Evil tutor]]
 - [[#keymaps][Keymaps]]
@@ -198,7 +200,6 @@ go install github.com/fatih/gomodifytags@latest
 #+end_src
 
 * Org mode
-
 ** Base org config
 
 #+begin_src emacs-lisp
@@ -367,6 +368,41 @@ Let's disable all of the default packages so we can customise it how /we/ want i
       org-latex-pdf-process
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+end_src
+
+** org-auto-tangle
+
+Add =#+auto_tangle: t= to the top of an org file to enable auto-tangle!
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-auto-tangle)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t)
+)
+#+end_src
+
+** ob-mermaid
+
+Needs ~mmdc~ available.
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! ob-mermaid)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(after! ob-mermaid
+  :config
+  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
+
+(org-babel-do-load-languages
+    'org-babel-load-languages
+    '((mermaid . t)))
 #+end_src
 
 * General
