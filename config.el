@@ -28,17 +28,17 @@
 ;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15 :weight 'regular)
+(setq doom-font (font-spec :family "JetBrainsMono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
-      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
+      doom-big-font (font-spec :family "JetBrainsMono" :size 24))
 
-;; (after! doom-themes
-;;   (setq doom-themes-enable-bold t
-;;         doom-themes-enable-italic t))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
 
 (custom-set-faces!
-  '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic))
+  '(font-lock-comment-face :slant italic))
+  ;; '(font-lock-keyword-face :slant italic))
 
 (setq doom-theme 'doom-palenight)
 
@@ -114,7 +114,7 @@
 
 (setq org-pretty-entities t)
 
-;; (plist-put org-format-latex-options :scale 0.5)
+(plist-put org-format-latex-options :scale 0.5)
 (setq org-highlight-latex-and-related '(latex))
 (plist-put org-format-latex-options :background "Transparent")
 
@@ -217,6 +217,20 @@
 (map! :leader
       (:prefix ("b" . "buffer")
        :desc "Format buffer" "f" #'lsp-format-buffer))
+
+(define-derived-mode astro-mode web-mode "astro")
+(setq auto-mode-alist
+      (append '((".*\\.astro\\'" . astro-mode))
+              auto-mode-alist))
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+               '(astro-mode . "astro"))
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
+                    :activation-fn (lsp-activate-on "astro")
+                    :server-id 'astro-ls)))
 
 (use-package! ellama
   :init

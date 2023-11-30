@@ -64,6 +64,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
   - [[#typscript][Typscript]]
+  - [[#astro][Astro]]
   - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
   - [[#prettier][Prettier]]
@@ -134,17 +135,17 @@ go install github.com/fatih/gomodifytags@latest
 ;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15 :weight 'regular)
+(setq doom-font (font-spec :family "JetBrainsMono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
-      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 24))
+      doom-big-font (font-spec :family "JetBrainsMono" :size 24))
 
-;; (after! doom-themes
-;;   (setq doom-themes-enable-bold t
-;;         doom-themes-enable-italic t))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
 
 (custom-set-faces!
-  '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic))
+  '(font-lock-comment-face :slant italic))
+  ;; '(font-lock-keyword-face :slant italic))
 #+end_src
 
 ** Theme
@@ -251,7 +252,7 @@ Render =\omega= as $\omega$.
 General latex settings.
 
 #+begin_src emacs-lisp
-;; (plist-put org-format-latex-options :scale 0.5)
+(plist-put org-format-latex-options :scale 0.5)
 (setq org-highlight-latex-and-related '(latex))
 (plist-put org-format-latex-options :background "Transparent")
 #+end_src
@@ -456,6 +457,23 @@ Bind [[kbd:][SPC b f]] to format buffer using lsp.
 Temporarily unpin lsp as ts-ls has breaking changes
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! lsp-mode)
+#+end_src
+
+** Astro
+#+begin_src emacs-lisp
+(define-derived-mode astro-mode web-mode "astro")
+(setq auto-mode-alist
+      (append '((".*\\.astro\\'" . astro-mode))
+              auto-mode-alist))
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+               '(astro-mode . "astro"))
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
+                    :activation-fn (lsp-activate-on "astro")
+                    :server-id 'astro-ls)))
 #+end_src
 
 ** Svelte
