@@ -37,6 +37,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#screenshots][Screenshots]]
 - [[#packages-required][Packages required]]
   - [[#golang][GoLang]]
+- [[#snippets-required][Snippets required]]
 - [[#sourcing-scripts][Sourcing scripts]]
 - [[#user-interface][User Interface]]
   - [[#name-and-email][Name and email]]
@@ -69,6 +70,8 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#prisma][Prisma]]
   - [[#prettier][Prettier]]
 - [[#llm][LLM]]
+- [[#ai-powered-completion][AI-powered completion]]
+  - [[#github-copilot][Github copilot]]
 
 * Packages required
 
@@ -88,6 +91,10 @@ go install golang.org/x/tools/cmd/guru@latest
 go install github.com/cweill/gotests/gotests@latest
 go install github.com/fatih/gomodifytags@latest
 #+end_src
+
+* Snippets required
+
+You might need some snippets tangled from [[./snippets.org][snippets.org]].
 
 * Sourcing scripts
 
@@ -511,4 +518,24 @@ Have this installed, just in case I have a project that needs it.
           ;; (llm-ollama-host "10.27.27.100")
           (make-llm-ollama
            :chat-model "zephyr" :embedding-model "zephyr")))
+#+end_src
+
+* AI-powered completion
+
+** Github copilot
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; accept completion from copilot and fallback to company
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
 #+end_src

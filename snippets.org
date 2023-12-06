@@ -1,0 +1,16 @@
+#+title: Snippets
+#+author: Atri Hegde
+
+* Preface
+These are snippets that I need to tangle on a fresh install.
+
+* Table of Contents :TOC:
+- [[#preface][Preface]]
+- [[#dictionary][Dictionary]]
+
+* Dictionary
+Fix issue where you can't customise the dictionary
+
+#+begin_src conf :tangle ~/.config/emacs/.local/etc/ispell/.pws :mkdirp true
+personal_ws-1.1 nil n
+#+end_src
