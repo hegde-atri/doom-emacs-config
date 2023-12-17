@@ -99,7 +99,11 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 * Sourcing scripts
 
 #+begin_src emacs-lisp
-;; (add-to-list 'load-path "~/.config/doom/scripts/")
+(add-to-list 'load-path "~/.config/doom/scripts/")
+#+end_src
+
+#+begin_src emacs-lisp
+(require 'zone-words)
 #+end_src
 
 * User Interface

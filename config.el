@@ -1,4 +1,6 @@
-;; (add-to-list 'load-path "~/.config/doom/scripts/")
+(add-to-list 'load-path "~/.config/doom/scripts/")
+
+(require 'zone-words)
 
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq user-full-name "Atri Hegde"
