@@ -64,7 +64,8 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#evil-tutor][Evil tutor]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
-  - [[#typscript][Typscript]]
+  - [[#general-1][General]]
+  - [[#typescript][Typescript]]
   - [[#astro][Astro]]
   - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
@@ -463,9 +464,18 @@ Bind [[kbd:][SPC b f]] to format buffer using lsp.
 
 * LSP
 
-** Typscript
+** General
 
-Temporarily unpin lsp as ts-ls has breaking changes
+*** Inlay hints
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t
+        lsp-inlay-hints-mode t))
+#+end_src
+
+** Typescript
+
+Temporarily unpin =lsp= as =ts-ls= has breaking changes
 #+begin_src emacs-lisp :tangle packages.el
 (unpin! lsp-mode)
 #+end_src

@@ -220,6 +220,10 @@
       (:prefix ("b" . "buffer")
        :desc "Format buffer" "f" #'lsp-format-buffer))
 
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable t
+        lsp-inlay-hints-mode t))
+
 (define-derived-mode astro-mode web-mode "astro")
 (setq auto-mode-alist
       (append '((".*\\.astro\\'" . astro-mode))
