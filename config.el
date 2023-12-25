@@ -125,6 +125,17 @@
 (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
 (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
 
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(d)" "DONE")
+        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")))
+
+(setq org-todo-keyword-faces '(
+                               ("IDEA" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
+                               ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold)) ; light blue
+                               ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold)) ; pink
+                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold))
+                               ))
+
 (setq org-pretty-entities t)
 
 (plist-put org-format-latex-options :scale 0.5)

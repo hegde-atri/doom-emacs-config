@@ -51,6 +51,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 - [[#org-mode][Org mode]]
   - [[#base-org-config][Base org config]]
   - [[#fonts-in-org][Fonts in Org]]
+  - [[#items][items]]
   - [[#latex-snippets][Latex snippets]]
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
@@ -267,9 +268,23 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
 #+end_src
 
+** TODO items
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(d)" "DONE")
+        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")))
+
+(setq org-todo-keyword-faces '(
+                               ("IDEA" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
+                               ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold)) ; light blue
+                               ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold)) ; pink
+                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold))
+                               ))
+#+end_src
+
 ** Latex snippets
 
-Render =\omega= as $\omega$.
+Render =omega= as $\omega$.
 
 #+begin_src emacs-lisp
 (setq org-pretty-entities t)
