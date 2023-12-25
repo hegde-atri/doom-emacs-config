@@ -51,7 +51,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 - [[#org-mode][Org mode]]
   - [[#base-org-config][Base org config]]
   - [[#fonts-in-org][Fonts in Org]]
-  - [[#items][items]]
+  - [[#keywords][keywords]]
   - [[#latex-snippets][Latex snippets]]
   - [[#org-roam][Org Roam]]
   - [[#writeroom][Writeroom]]
@@ -268,7 +268,7 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
 #+end_src
 
-** TODO items
+** Todo keywords
 #+begin_src emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(d)" "DONE")
