@@ -1,7 +1,5 @@
 (add-to-list 'load-path "~/.config/doom/scripts/")
 
-(require 'zone-words)
-
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq user-full-name "Atri Hegde"
       user-mail-address "me@hegdeatri.com")
@@ -81,6 +79,15 @@
   (doom-modeline-gnus-timer nil)
   (setq display-time-mode t))
 
+(let ((alternatives '("zoro.png"
+                      "vagabond.png"
+                      "doom.png"
+                      "doomEmacsDracula.svg"
+                      "emacs.svg")))
+  (setq fancy-splash-image
+        (concat doom-private-dir "splash/"
+                (nth (random (length alternatives)) alternatives))))
+
 (map! :leader
       (:prefix ("=" . "open config")
        :desc "Hyprland"      "h" #'(lambda () (interactive) (find-file "~/.config/hypr/hypr.org"))
@@ -91,6 +98,14 @@
 
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+(require 'zone)
+(require 'zone-words)
+(eval-after-load "zone"
+  '(unless (memq 'zone-words (append zone-programs nil))
+     (setq zone-programs (vconcat [zone-words]))))
+
+(zone-when-idle 120)
 
 (setq org-directory "~/org/")
 

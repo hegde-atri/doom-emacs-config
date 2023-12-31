@@ -46,8 +46,10 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#font][Font]]
   - [[#theme][Theme]]
   - [[#doom-modeline][Doom modeline]]
+  - [[#doom-dashboard][Doom dashboard]]
   - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil mode]]
+  - [[#zone-mode][Zone mode]]
 - [[#org-mode][Org mode]]
   - [[#base-org-config][Base org config]]
   - [[#fonts-in-org][Fonts in Org]]
@@ -102,10 +104,6 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 
 #+begin_src emacs-lisp
 (add-to-list 'load-path "~/.config/doom/scripts/")
-#+end_src
-
-#+begin_src emacs-lisp
-(require 'zone-words)
 #+end_src
 
 * User Interface
@@ -209,6 +207,18 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
   (setq display-time-mode t))
 #+end_src
 
+** Doom dashboard
+#+begin_src emacs-lisp
+(let ((alternatives '("zoro.png"
+                      "vagabond.png"
+                      "doom.png"
+                      "doomEmacsDracula.svg"
+                      "emacs.svg")))
+  (setq fancy-splash-image
+        (concat doom-private-dir "splash/"
+                (nth (random (length alternatives)) alternatives))))
+#+end_src
+
 ** Keybinds
 #+begin_src emacs-lisp
 (map! :leader
@@ -225,6 +235,17 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 #+begin_src emacs-lisp
 (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+#+end_src
+
+** Zone mode
+#+begin_src emacs-lisp
+(require 'zone)
+(require 'zone-words)
+(eval-after-load "zone"
+  '(unless (memq 'zone-words (append zone-programs nil))
+     (setq zone-programs (vconcat [zone-words]))))
+
+(zone-when-idle 120)
 #+end_src
 
 * Org mode
