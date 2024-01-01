@@ -12,7 +12,20 @@ These are snippets that I need to tangle on a fresh install.
 Fix issue where you can't customise the dictionary
 
 #+begin_src conf :tangle ~/.config/emacs/.local/etc/ispell/.pws :mkdirp true
-personal_ws-1.1 en 2
+personal_ws-1.1 en 15
 atri
+automata
+cardinality
+customisable
+dimensionality
+discriminative
+figma
+hackathon
 hegde
+hyprland
+performant
+reigate
+roadmap
+todo
+univariate
 #+end_src

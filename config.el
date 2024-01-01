@@ -105,7 +105,7 @@
   '(unless (memq 'zone-words (append zone-programs nil))
      (setq zone-programs (vconcat [zone-words]))))
 
-(zone-when-idle 120)
+(zone-when-idle 600)
 
 (setq org-directory "~/org/")
 
