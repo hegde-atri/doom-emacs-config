@@ -50,6 +50,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#keybinds][Keybinds]]
   - [[#evil-mode][Evil mode]]
   - [[#zone-mode][Zone mode]]
+  - [[#transpose-frame][Transpose Frame]]
 - [[#org-mode][Org mode]]
   - [[#base-org-config][Base org config]]
   - [[#fonts-in-org][Fonts in Org]]
@@ -248,6 +249,13 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 (zone-when-idle 600)
 #+end_src
 
+** Transpose Frame
+Rotates split
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! transpose-frame)
+#+end_src
+
 * Org mode
 ** Base org config
 
@@ -317,6 +325,16 @@ General latex settings.
 (plist-put org-format-latex-options :scale 0.5)
 (setq org-highlight-latex-and-related '(latex))
 (plist-put org-format-latex-options :background "Transparent")
+#+end_src
+
+*** org-fragtog Auto LaTeX fragment preview
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-fragtog)
+#+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-fragtog-mode)
 #+end_src
 
 ** Org Roam

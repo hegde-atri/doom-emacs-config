@@ -1,3 +1,7 @@
+(package! transpose-frame)
+
+(package! org-fragtog)
+
 (unpin! org-roam)
 (package! org-roam-ui)
 

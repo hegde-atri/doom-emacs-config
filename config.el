@@ -157,6 +157,8 @@
 (setq org-highlight-latex-and-related '(latex))
 (plist-put org-format-latex-options :background "Transparent")
 
+(add-hook 'org-mode-hook 'org-fragtog-mode)
+
 (setq org-roam-directory "~/org/roam")
 (setq org-roam-capture-templates
   '(("d" "default" plain
