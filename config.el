@@ -142,13 +142,16 @@
 
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(d)" "DONE")
-        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")))
+        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")
+        (sequence "CLIENT(c)" "SCRIPTED(s)" "SENT")))
 
 (setq org-todo-keyword-faces '(
                                ("IDEA" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
                                ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold)) ; light blue
                                ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold)) ; pink
-                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold))
+                               ("CLIENT" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
+                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold)) ; grey
+                               ("SENT" . ( :foreground "gray65" :bold t :weight bold)) ; grey
                                ))
 
 (setq org-pretty-entities t)
@@ -276,6 +279,10 @@
    (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
                     :activation-fn (lsp-activate-on "astro")
                     :server-id 'astro-ls)))
+
+(after! poetry
+  (remove-hook 'python-mode-hook #'poetry-tracking-mode)
+  (add-hook 'python-mode-hook 'poetry-track-virtualenv))
 
 (use-package! ellama
   :init

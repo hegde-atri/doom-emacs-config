@@ -58,12 +58,16 @@
         ;; TODO / DONE
         ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
         ("DOING" . ((lambda (tag) (svg-tag-make "DOING" :face "b8e4f9" :inverse t :margin 0))))
+        ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
+
         ("IDEA" . ((lambda (tag) (svg-tag-make "IDEA" :face "#ffcc00" :inverse t :margin 0))))
         ("SCRIPTED" . ((lambda (tag) (svg-tag-make "SCRIPTED" :face "b8e4f9" :inverse t :margin 0))))
         ("RECORDED" . ((lambda (tag) (svg-tag-make "RECORDED" :face "ff84c9" :inverse t :margin 0))))
         ("EDITED" . ((lambda (tag) (svg-tag-make "EDITED" :face 'org-done :margin 0))))
-        ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
 
+        ("CLIENT" . ((lambda (tag) (svg-tag-make "CLIENT" :face "#ffcc00" :inverse t :margin 0))))
+        ("SCRIPTED" . ((lambda (tag) (svg-tag-make "SCRIPTED" :face "b8e4f9" :inverse t :margin 0))))
+        ("SENT" . ((lambda (tag) (svg-tag-make "SENT" :face 'org-done :margin 0))))
 
         ;; Citation of the form [cite:@Knuth:1984]
         ("\\(\\[cite:@[A-Za-z]+:\\)" . ((lambda (tag)

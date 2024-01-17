@@ -74,6 +74,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
   - [[#prettier][Prettier]]
+  - [[#python][Python]]
 - [[#llm][LLM]]
 - [[#ai-powered-completion][AI-powered completion]]
   - [[#github-copilot][Github copilot]]
@@ -301,19 +302,22 @@ Rotates split
 #+begin_src emacs-lisp
 (setq org-todo-keywords
       '((sequence "TODO(t)" "DOING(d)" "DONE")
-        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")))
+        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")
+        (sequence "CLIENT(c)" "SCRIPTED(s)" "SENT")))
 
 (setq org-todo-keyword-faces '(
                                ("IDEA" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
                                ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold)) ; light blue
                                ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold)) ; pink
-                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold))
+                               ("CLIENT" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
+                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold)) ; grey
+                               ("SENT" . ( :foreground "gray65" :bold t :weight bold)) ; grey
                                ))
 #+end_src
 
 ** Latex snippets
 
-Render =omega= as $\omega$.
+Render =\omega= as $\omega$.
 
 #+begin_src emacs-lisp
 (setq org-pretty-entities t)
@@ -583,6 +587,15 @@ Have this installed, just in case I have a project that needs it.
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! prettier)
+#+end_src
+
+** Python
+Fix poetry bug
+
+#+begin_src emacs-lisp
+(after! poetry
+  (remove-hook 'python-mode-hook #'poetry-tracking-mode)
+  (add-hook 'python-mode-hook 'poetry-track-virtualenv))
 #+end_src
 
 * LLM
