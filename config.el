@@ -252,8 +252,8 @@
 
 ;; (after! mermaid-mode)
 
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
+(setq shell-file-name "/bin/zsh")
+(setq-default shell-file-name "/bin/zsh")
 (setenv "SHELL" shell-file-name)
 
 (map! :leader "w c" nil)

@@ -505,8 +505,8 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
 * General
 
 #+begin_src emacs-lisp
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
+(setq shell-file-name "/bin/zsh")
+(setq-default shell-file-name "/bin/zsh")
 (setenv "SHELL" shell-file-name)
 #+end_src
 
