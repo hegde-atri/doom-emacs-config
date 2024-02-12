@@ -20,6 +20,8 @@
 
 (unpin! lsp-mode)
 
+(package! astro-ts-mode :recipe (:host github :repo "Sorixelle/astro-ts-mode" :branch "master"))
+
 (package! svelte-mode)
 
 (package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))

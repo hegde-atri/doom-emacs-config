@@ -266,23 +266,37 @@
   (setq lsp-inlay-hint-enable t
         lsp-inlay-hints-mode t))
 
+(setq treesit-language-source-alist
+      '((astro "https://github.com/virchau13/tree-sitter-astro")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+
 (define-derived-mode astro-mode web-mode "astro")
 (setq auto-mode-alist
       (append '((".*\\.astro\\'" . astro-mode))
               auto-mode-alist))
 
+(defun astro-get-tsserver ()
+    ""
+    (f-join (lsp-workspace-root) "node_modules/typescript/lib/tsserverlibrary.js"))
+
+
 (with-eval-after-load 'lsp-mode
   (add-to-list 'lsp-language-id-configuration
-               '(astro-mode . "astro"))
+               '(astro-ts-mode . "astro"))
 
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
-                    :activation-fn (lsp-activate-on "astro")
-                    :server-id 'astro-ls)))
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
+                  :activation-fn (lsp-activate-on "astro")
+                  :server-id 'astro-ls)))
 
 (after! poetry
   (remove-hook 'python-mode-hook #'poetry-tracking-mode)
   (add-hook 'python-mode-hook 'poetry-track-virtualenv))
+
+(after! lsp
+  (add-to-list 'lsp-language-id-configuration '(".*\\.html\\.erb$" . "html"))
+)
 
 (use-package! ellama
   :init
