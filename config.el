@@ -79,14 +79,8 @@
   (doom-modeline-gnus-timer nil)
   (setq display-time-mode t))
 
-(let ((alternatives '("zoro.png"
-                      "vagabond.png"
-                      "doom.png"
-                      "doomEmacsDracula.svg"
-                      "emacs.svg")))
-  (setq fancy-splash-image
-        (concat doom-private-dir "splash/"
-                (nth (random (length alternatives)) alternatives))))
+(setq fancy-splash-image
+      (concat doom-private-dir "splash/" "vagabond.png"))
 
 (map! :leader
       (:prefix ("=" . "open config")

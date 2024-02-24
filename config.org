@@ -212,14 +212,8 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 
 ** Doom dashboard
 #+begin_src emacs-lisp
-(let ((alternatives '("zoro.png"
-                      "vagabond.png"
-                      "doom.png"
-                      "doomEmacsDracula.svg"
-                      "emacs.svg")))
   (setq fancy-splash-image
-        (concat doom-private-dir "splash/"
-                (nth (random (length alternatives)) alternatives))))
+        (concat doom-private-dir "splash/" "vagabond.png"))
 #+end_src
 
 ** Keybinds
