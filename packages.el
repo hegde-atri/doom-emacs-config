@@ -18,6 +18,11 @@
 
 (package! evil-tutor)
 
+(package! lean4-mode :recipe
+  (:host github
+   :repo "leanprover/lean4-mode"
+   :files ("*.el" "data")))
+
 (unpin! lsp-mode)
 
 (package! astro-ts-mode :recipe (:host github :repo "Sorixelle/astro-ts-mode" :branch "master"))
