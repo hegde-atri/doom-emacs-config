@@ -80,7 +80,7 @@
   (setq display-time-mode t))
 
 (setq fancy-splash-image
-      (concat doom-private-dir "splash/" "vagabond.png"))
+      (concat doom-user-dir "splash/" "vagabond.png"))
 
 (map! :leader
       (:prefix ("=" . "open config")
@@ -222,7 +222,7 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
-(setq org-latex-listings 'minted
+(setq org-latex-src-block-backend 'minted
       org-latex-packages-alist '(("" "minted"))
       org-latex-pdf-process
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
@@ -249,6 +249,8 @@
 (setq shell-file-name "/bin/zsh")
 (setq-default shell-file-name "/bin/zsh")
 (setenv "SHELL" shell-file-name)
+
+(add-hook 'web-mode 'sgml-electric-tag-pair-mode)
 
 (map! :leader "w c" nil)
 

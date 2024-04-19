@@ -20,8 +20,8 @@
 
 (package! lean4-mode :recipe
   (:host github
-   :repo "leanprover/lean4-mode"
-   :files ("*.el" "data")))
+   :repo "leanprover/lean-mode"
+   :files ("*.el")))
 
 (unpin! lsp-mode)
 
