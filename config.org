@@ -518,7 +518,7 @@ I will finish it one day...
 ** HTML edit tags
 
 #+begin_src emacs-lisp
-(add-hook 'web-mode 'sgml-electric-tag-pair-mode)
+(add-hook 'web-mode-hook 'sgml-electric-tag-pair-mode)
 #+end_src
 
 ** Lean - theorum prover
