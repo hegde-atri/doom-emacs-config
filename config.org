@@ -67,7 +67,6 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 - [[#general][General]]
   - [[#evil-tutor][Evil tutor]]
   - [[#html-edit-tags][HTML edit tags]]
-  - [[#lean---theorum-prover][Lean - theorum prover]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
   - [[#general-1][General]]
@@ -518,16 +517,8 @@ I will finish it one day...
 ** HTML edit tags
 
 #+begin_src emacs-lisp
+(require 'sgml-mode)
 (add-hook 'web-mode-hook 'sgml-electric-tag-pair-mode)
-#+end_src
-
-** Lean - theorum prover
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! lean4-mode :recipe
-  (:host github
-   :repo "leanprover/lean-mode"
-   :files ("*.el")))
 #+end_src
 
 * Keymaps

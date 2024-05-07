@@ -250,6 +250,7 @@
 (setq-default shell-file-name "/bin/zsh")
 (setenv "SHELL" shell-file-name)
 
+(require 'sgml-mode)
 (add-hook 'web-mode-hook 'sgml-electric-tag-pair-mode)
 
 (map! :leader "w c" nil)
