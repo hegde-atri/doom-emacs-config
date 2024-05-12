@@ -84,7 +84,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 * Packages required
 
 #+begin_src bash :tangle no
-paru -S hunspell hunspell-en_gb wordnet-cli sqlite ripgrep texlive-core texlive-bin texlive-science texlive-latexextra gnuplot
+paru -S hunspell hunspell-en_gb wordnet-cli sqlite ripgrep texlive-core texlive-bin texlive-science texlive-latexextra gnuplot tuntox
 #+end_src
 
 ** GoLang
