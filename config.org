@@ -366,10 +366,10 @@ General latex settings.
 
 ** Writeroom
 #+begin_src emacs-lisp
-;; writeroom mode bydefault for org roam buffers.
-(add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Keep fonts in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Enable svg-tag-mode
 (add-hook 'org-mode-hook #'svg-tag-mode)
 ;; after org ends
@@ -441,7 +441,7 @@ Let's disable all of the default packages so we can customise it how /we/ want i
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+end_src
 
-*** Using minted for code highlightings
+*** Using minted for code highlighting
 
 #+begin_src emacs-lisp
 (setq org-latex-src-block-backend 'minted

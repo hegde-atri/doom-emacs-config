@@ -180,10 +180,10 @@
 )
 ;; (org-roam-db-autosync-enable)
 
-;; writeroom mode bydefault for org roam buffers.
-(add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Keep fonts in writeroom mode.
 (add-hook 'org-mode-hook #'buffer-face-mode)
+;; writeroom mode bydefault for org roam buffers.
+(add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Enable svg-tag-mode
 (add-hook 'org-mode-hook #'svg-tag-mode)
 ;; after org ends
