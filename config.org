@@ -1,6 +1,7 @@
 #+title: Config
 #+author: Atri Hegde
 #+description: TODO
+#+property: header-args :tangle config.el
 
 * Preface
 
@@ -65,7 +66,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#org-auto-tangle][org-auto-tangle]]
   - [[#ob-mermaid][ob-mermaid]]
 - [[#general][General]]
-  - [[#evil-tutor][Evil tutor]]
+  - [[#evil-tutor][Evil Tutor]]
   - [[#html-edit-tags][HTML edit tags]]
 - [[#keymaps][Keymaps]]
 - [[#lsp][LSP]]
@@ -506,7 +507,12 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
 (setenv "SHELL" shell-file-name)
 #+end_src
 
-** Evil tutor
+#+begin_src emacs-lisp
+(setq evil-want-fine-undo t
+      truncate-string-ellipsis "…")
+#+end_src
+
+** Evil Tutor
 
 I will finish it one day...
 
