@@ -18,6 +18,8 @@
 
 (package! evil-tutor)
 
+(package! evil-escape :disable t)
+
 (unpin! lsp-mode)
 
 (package! astro-ts-mode :recipe (:host github :repo "Sorixelle/astro-ts-mode" :branch "master"))

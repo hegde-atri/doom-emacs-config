@@ -509,7 +509,20 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
 
 #+begin_src emacs-lisp
 (setq evil-want-fine-undo t
-      truncate-string-ellipsis "…")
+      truncate-string-ellipsis "…"
+      which-key-idle-delay 0.5)
+
+
+;; which key prompt customisation
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
+
+
 #+end_src
 
 ** Evil Tutor
@@ -518,6 +531,8 @@ I will finish it one day...
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! evil-tutor)
+
+(package! evil-escape :disable t)
 #+end_src
 
 ** HTML edit tags
@@ -665,6 +680,9 @@ Fix poetry bug
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
+              ;; ("C-<tab>" . 'copilot-accept-completion)
+              ;; ("C-TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+              ("C-<tab>" . 'copilot-accept-completion-by-word)
+              ))
 #+end_src
