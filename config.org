@@ -415,7 +415,7 @@ Load our scripts for SVG Tags.
 (use-package! svg-lib
   :init (add-hook 'after-setting-font-hook (lambda () (setq svg-lib-style-default (svg-lib-style-compute-default)))))
 
-(load "/home/mizuuu/.config/doom/scripts/svg-tags.el")
+(load (concat doom-user-dir "scripts/" "svg-tags.el"))
 #+end_src
 
 ** Notebook mode
