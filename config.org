@@ -66,6 +66,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#org-auto-tangle][org-auto-tangle]]
   - [[#ob-mermaid][ob-mermaid]]
 - [[#general][General]]
+  - [[#shell-shenanigans][Shell Shenanigans]]
   - [[#evil-tutor][Evil Tutor]]
   - [[#html-edit-tags][HTML edit tags]]
 - [[#keymaps][Keymaps]]
@@ -78,8 +79,8 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#prettier][Prettier]]
   - [[#python][Python]]
   - [[#ruby---erb][Ruby - ERB]]
-- [[#llm][LLM]]
-- [[#ai-powered-completion][AI-powered completion]]
+- [[#llm-stuff][LLM stuff]]
+  - [[#gptel][GPTel]]
   - [[#github-copilot][Github copilot]]
 
 * Packages required
@@ -500,18 +501,21 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
 #+end_src
 
 * General
+** Shell Shenanigans
 
 #+begin_src emacs-lisp
-(setq shell-file-name "/bin/zsh")
-(setq-default shell-file-name "/bin/zsh")
+(setq shell-file-name "/bin/bash")
+(setq-default shell-file-name "/bin/bash")
 (setenv "SHELL" shell-file-name)
+
+(require 'vterm)
+(setq vterm-shell "/usr/bin/nu")
 #+end_src
 
 #+begin_src emacs-lisp
 (setq evil-want-fine-undo t
       truncate-string-ellipsis "…"
       which-key-idle-delay 0.5)
-
 
 ;; which key prompt customisation
 (setq which-key-allow-multiple-replacements t)
@@ -521,8 +525,6 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
-
-
 #+end_src
 
 ** Evil Tutor
@@ -647,24 +649,20 @@ Fix poetry bug
 )
 #+end_src
 
-* LLM
-
+* LLM stuff
+** GPTel
 #+begin_src emacs-lisp :tangle packages.el
-(package! ellama)
+(package! gptel)
 #+end_src
 
-#+begin_src emacs-lisp
-(use-package! ellama
-  :init
-  (setopt ellama-language "English")
-  (require 'llm-ollama)
-  (setopt ellama-provider
-          ;; (llm-ollama-host "10.27.27.100")
-          (make-llm-ollama
-           :chat-model "zephyr" :embedding-model "zephyr")))
+#+begin_src emacs-lisp :tangle yes
+(use-package! gptel
+  :config
+  (setq gptel-default-mode 'org-mode)
+  )
+(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
 #+end_src
-
-* AI-powered completion
 
 ** Github copilot
 
