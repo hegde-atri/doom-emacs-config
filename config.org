@@ -67,6 +67,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#ob-mermaid][ob-mermaid]]
 - [[#general][General]]
   - [[#shell-shenanigans][Shell Shenanigans]]
+  - [[#elcord][Elcord]]
   - [[#auth-sources][Auth Sources]]
   - [[#evil-tutor][Evil Tutor]]
   - [[#html-edit-tags][HTML edit tags]]
@@ -74,7 +75,6 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
 - [[#lsp][LSP]]
   - [[#general-1][General]]
   - [[#typescript][Typescript]]
-  - [[#astro][Astro]]
   - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
   - [[#prettier][Prettier]]
@@ -217,6 +217,16 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
   (doom-modeline-github-timer nil)
   (doom-modeline-gnus-timer nil)
   (setq display-time-mode t))
+
+(defun doom-modeline-conditional-buffer-encoding ()
+  "We expect the encoding to be LF UTF-8, so only show the modeline when this is not the case"
+  (setq-local doom-modeline-buffer-encoding
+    (unless (and (memq (plist-get (coding-system-plist buffer-file-coding-system) :category)
+                                 '(coding-category-undecided coding-category-utf-8))
+                           (not (memq (coding-system-eol-type buffer-file-coding-system) '(1 2))))
+                t)))
+
+(add-hook 'after-change-major-mode-hook #'doom-modeline-conditional-buffer-encoding)
 #+end_src
 
 ** Doom dashboard
@@ -289,7 +299,6 @@ Rotates split
                 ))
   (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
 (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-(set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
 (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
 (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
 (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
@@ -375,8 +384,10 @@ General latex settings.
 ** Writeroom
 #+begin_src emacs-lisp
 ;; Keep fonts in writeroom mode.
-(add-hook 'org-mode-hook #'buffer-face-mode)
-;; writeroom mode bydefault for org roam buffers.
+;; (add-hook 'org-mode-hook #'buffer-face-mode)
+;; writeroom mode by default for org roam buffers.
+(setq +zen-text-scale 0.8)
+(setq writeroom-width 0.5)
 (add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Enable svg-tag-mode
 (add-hook 'org-mode-hook #'svg-tag-mode)
@@ -533,6 +544,18 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
    ))
 #+end_src
 
+** Elcord
+#+begin_src emacs-lisp :tangle packages.el
+(package! elcord :pin "d0c9ace493d088bc70f7422705ff27dfcf162cca")
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! elcord
+  :commands elcord-mode
+  :config
+  (setq elcord-use-major-mode-as-main-icon t))
+#+end_src
+
 ** Auth Sources
 #+begin_src emacs-lisp :tangle yes
 (setq auth-sources '("~/.authinfo.gpg", "~/.authinfo", "~/.config/emacs/.local/state/authinfo.gpg"))
@@ -563,7 +586,7 @@ Unbind [[kbd:][SPC w c]] as it is easy to misclick
 (map! :leader "w c" nil)
 #+end_src
 
-Bind [[kbd:][SPC b f]] to format buffer using lsp.
+Bind [[kbd:][SPC b f]] to format buffer using LSP.
 
 #+begin_src emacs-lisp
 (map! :leader
@@ -573,7 +596,6 @@ Bind [[kbd:][SPC b f]] to format buffer using lsp.
 
 * LSP
 ** General
-
 *** Inlay hints
 #+begin_src emacs-lisp
 (after! lsp-mode
@@ -585,42 +607,7 @@ Bind [[kbd:][SPC b f]] to format buffer using lsp.
 
 Temporarily unpin =lsp= as =ts-ls= has breaking changes
 #+begin_src emacs-lisp :tangle packages.el
-(unpin! lsp-mode)
-#+end_src
-
-** Astro
-
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! astro-ts-mode :recipe (:host github :repo "Sorixelle/astro-ts-mode" :branch "master"))
-#+end_src
-
-
-#+begin_src emacs-lisp
-(setq treesit-language-source-alist
-      '((astro "https://github.com/virchau13/tree-sitter-astro")
-        (css "https://github.com/tree-sitter/tree-sitter-css")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
-
-(define-derived-mode astro-mode web-mode "astro")
-(setq auto-mode-alist
-      (append '((".*\\.astro\\'" . astro-mode))
-              auto-mode-alist))
-
-(defun astro-get-tsserver ()
-    ""
-    (f-join (lsp-workspace-root) "node_modules/typescript/lib/tsserverlibrary.js"))
-
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-               '(astro-ts-mode . "astro"))
-
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection '("astro-ls" "--stdio"))
-                  :activation-fn (lsp-activate-on "astro")
-                  :server-id 'astro-ls)))
-
+;; (unpin! lsp-mode)
 #+end_src
 
 ** Svelte
