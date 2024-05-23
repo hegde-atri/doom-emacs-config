@@ -666,7 +666,7 @@ Fix poetry bug
 
 #+begin_src emacs-lisp :tangle packages.el
 (package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -676,9 +676,6 @@ Fix poetry bug
   :bind (:map copilot-completion-map
               ("<tab>" . 'copilot-accept-completion)
               ("TAB" . 'copilot-accept-completion)
-              ;; ("C-<tab>" . 'copilot-accept-completion)
-              ;; ("C-TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)
-              ))
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
 #+end_src
