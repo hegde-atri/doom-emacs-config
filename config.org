@@ -67,6 +67,7 @@ I am not saying emacs is the best and has no issues. It does have some irritatin
   - [[#ob-mermaid][ob-mermaid]]
 - [[#general][General]]
   - [[#shell-shenanigans][Shell Shenanigans]]
+  - [[#auth-sources][Auth Sources]]
   - [[#evil-tutor][Evil Tutor]]
   - [[#html-edit-tags][HTML edit tags]]
 - [[#keymaps][Keymaps]]
@@ -166,22 +167,27 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 #+end_src
 
 ** Theme
+
 #+begin_src emacs-lisp
 (setq doom-theme 'doom-palenight)
 #+end_src
 
 *** Transparency
 #+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background 90)
-(add-to-list 'default-frame-alist '(alpha-background . 90))
+(set-frame-parameter nil 'alpha-background 100)
+(add-to-list 'default-frame-alist '(alpha-background . 100))
 
 (defun ha/toggle-window-transparency ()
   "Toggle transparency."
   (interactive)
-  (let ((alpha-transparency 90))
-    (pcase (frame-parameter nil 'alpha-background)
-      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
-      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
+  (if (equal (frame-parameter nil 'alpha-background) 90)
+      (progn
+        (set-frame-parameter nil 'alpha-background 100)
+        (add-to-list 'default-frame-alist '(alpha-background . 100)))
+    (progn
+      (set-frame-parameter nil 'alpha-background 90)
+      (add-to-list 'default-frame-alist '(alpha-background . 90))))
+  (redraw-frame))
 #+end_src
 
 ** Doom modeline
@@ -216,7 +222,7 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 ** Doom dashboard
 #+begin_src emacs-lisp
   (setq fancy-splash-image
-        (concat doom-user-dir "splash/" "vagabond.png"))
+        (concat doom-user-dir "splash/" "emacs.svg"))
 #+end_src
 
 ** Keybinds
@@ -324,7 +330,7 @@ Render =\omega= as $\omega$.
 General latex settings.
 
 #+begin_src emacs-lisp
-(plist-put org-format-latex-options :scale 0.5)
+(plist-put org-format-latex-options :scale 1)
 (setq org-highlight-latex-and-related '(latex))
 (plist-put org-format-latex-options :background "Transparent")
 #+end_src
@@ -525,6 +531,11 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
+#+end_src
+
+** Auth Sources
+#+begin_src emacs-lisp :tangle yes
+(setq auth-sources '("~/.authinfo.gpg", "~/.authinfo", "~/.config/emacs/.local/state/authinfo.gpg"))
 #+end_src
 
 ** Evil Tutor

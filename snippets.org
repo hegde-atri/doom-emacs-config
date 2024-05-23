@@ -7,6 +7,7 @@ These are snippets that I need to tangle on a fresh install.
 * Table of Contents :TOC:
 - [[#preface][Preface]]
 - [[#dictionary][Dictionary]]
+- [[#good-shortcuts-to-remember][Good shortcuts to remember]]
 
 * Dictionary
 Fix issue where you can't customise the dictionary
@@ -35,3 +36,6 @@ todo
 tof
 univariate
 #+end_src
+
+* Good shortcuts to remember
+kbd:C-c kbd:C-p and kbd:C-c kbd:C-n For previous and next visible heading in org mode.
