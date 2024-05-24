@@ -110,7 +110,7 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
 * Sourcing scripts
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path "~/.config/doom/scripts/")
+(add-to-list 'load-path (concat doom-user-dir "scripts/"))
 #+end_src
 
 * User Interface
