@@ -208,6 +208,7 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
   (doom-modeline-persp-name nil)
   (doom-modeline-minor-modes nil)
   (doom-modeline-enable-word-count nil)
+  (doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
   (doom-modeline-buffer-encoding t)
   (doom-modeline-indent-info nil)
   (doom-modeline-checker-simple-format t)
@@ -215,8 +216,7 @@ You might need some snippets tangled from [[./snippets.org][snippets.org]].
   (doom-modeline-env-version t)
   (doom-modeline-irc-stylize 'identity)
   (doom-modeline-github-timer nil)
-  (doom-modeline-gnus-timer nil)
-  (setq display-time-mode t))
+  (doom-modeline-gnus-timer nil))
 
 (defun doom-modeline-conditional-buffer-encoding ()
   "We expect the encoding to be LF UTF-8, so only show the modeline when this is not the case"
@@ -276,6 +276,11 @@ Rotates split
 
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
+;; Turn on doom-modeline word count mode
+(defun enable-doom-modeline-word-count ()
+  (setq-local doom-modeline-enable-word-count t))
+
+(add-hook 'org-mode-hook #'enable-doom-modeline-word-count)
 
 (after! org
   (setq org-log-done 'time)
@@ -387,7 +392,8 @@ General latex settings.
 ;; (add-hook 'org-mode-hook #'buffer-face-mode)
 ;; writeroom mode by default for org roam buffers.
 (setq +zen-text-scale 0.8)
-(setq writeroom-width 0.5)
+(setq writeroom-width 100)
+(setq writeroom-mode-line t)
 (add-hook 'org-mode-hook #'+zen/toggle t)
 ;; Enable svg-tag-mode
 (add-hook 'org-mode-hook #'svg-tag-mode)
