@@ -17,7 +17,7 @@ I was previously a poweruser of:
 
 I use emacs to do almost everything. After using org-mode, everything else feels like a slouch, the power of org-mode is unparalleled.
 
-I am not saying emacs is the best and has no issues. It does have some irritating quirks, but the things it brings far outweight this.
+I am not saying emacs is the best and has no issues. It does have some irritating quirks, but the things it brings far outweigh this.
 
 #+PLOT: title:"Comparison of different editors" transpose:yes type:radar min:0 max:5
 | Editor | Ease of use | Learning curve | Extensability | Versatility | Integrations | Performace |
@@ -598,6 +598,13 @@ Bind [[kbd:][SPC b f]] to format buffer using LSP.
 (map! :leader
       (:prefix ("b" . "buffer")
        :desc "Format buffer" "f" #'lsp-format-buffer))
+#+end_src
+
+Bind [[kbd:][SPC SPC]] to save buffer.
+
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Save buffer" "SPC" #'save-buffer)
 #+end_src
 
 * LSP
