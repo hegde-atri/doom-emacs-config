@@ -1,531 +1,53 @@
-#+title: Config
+#+title: Doom Emacs Config
 #+author: Atri Hegde
-#+description: TODO
-#+property: header-args :tangle config.el
 
 * Preface
 
-** Why Emacs?
-
-Emacs is not just a text-editor, instead it is a lisp interpreter.
-
-
-I was previously a poweruser of:
-- JetBrains IDE's
-- Visual Studio Code
-- Neovim (to some extent back in 2020)
-
-I use emacs to do almost everything. After using org-mode, everything else feels like a slouch, the power of org-mode is unparalleled.
-
-I am not saying emacs is the best and has no issues. It does have some irritating quirks, but the things it brings far outweigh this.
-
-#+PLOT: title:"Comparison of different editors" transpose:yes type:radar min:0 max:5
-| Editor | Ease of use | Learning curve | Extensability | Versatility | Integrations | Performace |
-|--------+-------------+----------------+---------------+-------------+--------------+------------|
-| Emacs  |           3 |              4 |             5 |           5 |            5 |          4 |
-| Neovim |           4 |              3 |             4 |           5 |            4 |          5 |
-| VSCode |           5 |              1 |             3 |           3 |            3 |          3 |
-[[./comparison.png]]
-
-** Screenshots
-
-[[./org.png]]
-[[./note-taking.png]]
-
 * Table of Contents :TOC:
 - [[#preface][Preface]]
-  - [[#why-emacs][Why Emacs?]]
-  - [[#screenshots][Screenshots]]
-- [[#packages-required][Packages required]]
-  - [[#golang][GoLang]]
-- [[#snippets-required][Snippets required]]
-- [[#sourcing-scripts][Sourcing scripts]]
 - [[#user-interface][User Interface]]
-  - [[#name-and-email][Name and email]]
-  - [[#line-numbers][Line Numbers]]
-  - [[#scroll-off][Scroll off]]
-  - [[#font][Font]]
-  - [[#theme][Theme]]
+  - [[#general][General]]
+  - [[#doom-fonts][Doom Fonts]]
+  - [[#doom-theme][Doom theme]]
   - [[#doom-modeline][Doom modeline]]
-  - [[#doom-dashboard][Doom dashboard]]
+  - [[#doom-dashboard][Doom Dashboard]]
   - [[#keybinds][Keybinds]]
-  - [[#evil-mode][Evil mode]]
-  - [[#zone-mode][Zone mode]]
-  - [[#transpose-frame][Transpose Frame]]
 - [[#org-mode][Org mode]]
-  - [[#base-org-config][Base org config]]
-  - [[#fonts-in-org][Fonts in Org]]
-  - [[#keywords][keywords]]
-  - [[#latex-snippets][Latex snippets]]
-  - [[#org-roam][Org Roam]]
-  - [[#writeroom][Writeroom]]
-  - [[#org-roam-ui][Org roam ui]]
-  - [[#svg-tags][SVG Tags]]
-  - [[#notebook-mode][Notebook mode]]
-  - [[#perfecting-latex][Perfecting LaTeX]]
-  - [[#org-auto-tangle][org-auto-tangle]]
-  - [[#ob-mermaid][ob-mermaid]]
-- [[#general][General]]
-  - [[#shell-shenanigans][Shell Shenanigans]]
-  - [[#elcord][Elcord]]
-  - [[#auth-sources][Auth Sources]]
-  - [[#evil-tutor][Evil Tutor]]
-  - [[#html-edit-tags][HTML edit tags]]
-- [[#keymaps][Keymaps]]
+  - [[#general-settings][General Settings]]
+  - [[#latex][Latex]]
+  - [[#cool-svg-tags][Cool SVG tags]]
+  - [[#org-roam][Org roam]]
 - [[#lsp][LSP]]
   - [[#general-1][General]]
-  - [[#typescript][Typescript]]
-  - [[#svelte][Svelte]]
   - [[#prisma][Prisma]]
-  - [[#prettier][Prettier]]
-  - [[#python][Python]]
-  - [[#ruby---erb][Ruby - ERB]]
-- [[#llm-stuff][LLM stuff]]
-  - [[#gptel][GPTel]]
-  - [[#github-copilot][Github copilot]]
-
-* Packages required
-
-#+begin_src bash :tangle no
-paru -S hunspell hunspell-en_gb wordnet-cli sqlite ripgrep texlive-core texlive-bin texlive-science texlive-latexextra gnuplot tuntox
-#+end_src
-
-** GoLang
-
-#+begin_src bash :tangle no
-go install github.com/x-motemen/gore/cmd/gore@latest
-go install github.com/stamblerre/gocode@latest
-go install golang.org/x/tools/cmd/godoc@latest
-go install golang.org/x/tools/cmd/goimports@latest
-go install golang.org/x/tools/cmd/gorename@latest
-go install golang.org/x/tools/cmd/guru@latest
-go install github.com/cweill/gotests/gotests@latest
-go install github.com/fatih/gomodifytags@latest
-#+end_src
-
-* Snippets required
-
-You might need some snippets tangled from [[./snippets.org][snippets.org]].
-
-* Sourcing scripts
-
-#+begin_src emacs-lisp
-(add-to-list 'load-path (concat doom-user-dir "scripts/"))
-#+end_src
 
 * User Interface
-** Name and email
+** General
 #+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 (setq user-full-name "Atri Hegde"
-      user-mail-address "me@hegdeatri.com")
+      ;; I do not use emacs as my email client lol
+      user-mail-address "atri@example.com")
 #+end_src
-
-** Line Numbers
+Relative Line numbers.
 #+begin_src emacs-lisp
 (setq display-line-numbers-type 'relative)
 #+end_src
-
-** Scroll off
+Scroll off settings.
 #+begin_src emacs-lisp
 (setq scroll-margin 7)
 
+(defvar my-zero-scroll-margin-modes
+  '(Info-mode term-mode eshell-mode shell-mode erc-mode vterm-mode)
+  "List of major modes where scroll-margin should be set to 0.")
+
 (defun my-set-scroll-margin ()
   "Set scroll-margin based on the current major mode."
-  (setq-local scroll-margin
-              (cond ((derived-mode-p 'Info-mode) 0)
-                    ((derived-mode-p 'term-mode) 0)
-                    ((derived-mode-p 'eshell-mode) 0)
-                    ((derived-mode-p 'shell-mode) 0)
-                    ((derived-mode-p 'erc-mode) 0)
-                    ((derived-mode-p 'vterm-mode) 0)
-                    (t 7))))
+  (setq-local scroll-margin (if (apply #'derived-mode-p my-zero-scroll-margin-modes) 0 7)))
 
 (add-hook 'after-change-major-mode-hook #'my-set-scroll-margin)
 #+end_src
-
-** Font
-#+begin_src emacs-lisp
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-symbol-font' -- for symbols
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-
-(setq doom-font (font-spec :family "JetBrainsMono" :size 15 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
-      doom-big-font (font-spec :family "JetBrainsMono" :size 24))
-
-(after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
-
-(custom-set-faces!
-  '(font-lock-comment-face :slant italic))
-  ;; '(font-lock-keyword-face :slant italic))
-#+end_src
-
-** Theme
-
-#+begin_src emacs-lisp
-(setq doom-theme 'doom-palenight)
-#+end_src
-
-*** Transparency
-#+begin_src emacs-lisp
-(set-frame-parameter nil 'alpha-background 100)
-(add-to-list 'default-frame-alist '(alpha-background . 100))
-
-(defun ha/toggle-window-transparency ()
-  "Toggle transparency."
-  (interactive)
-  (if (equal (frame-parameter nil 'alpha-background) 90)
-      (progn
-        (set-frame-parameter nil 'alpha-background 100)
-        (add-to-list 'default-frame-alist '(alpha-background . 100)))
-    (progn
-      (set-frame-parameter nil 'alpha-background 90)
-      (add-to-list 'default-frame-alist '(alpha-background . 90))))
-  (redraw-frame))
-#+end_src
-
-** Doom modeline
-#+begin_src emacs-lisp
-(use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
-  :custom
-  (doom-modeline-height 35)
-  (doom-modeline-bar-width 1)
-  (display-battery-mode t)
-  (doom-modeline-time t)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-icon t)
-  (doom-modeline-major-mode-color-icon t)
-  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
-  (doom-modeline-buffer-state-icon t)
-  (doom-modeline-buffer-modification-icon t)
-  (doom-modeline-persp-name nil)
-  (doom-modeline-minor-modes nil)
-  (doom-modeline-enable-word-count nil)
-  (doom-modeline-continuous-word-count-modes '(markdown-mode gfm-mode org-mode))
-  (doom-modeline-buffer-encoding t)
-  (doom-modeline-indent-info nil)
-  (doom-modeline-checker-simple-format t)
-  (doom-modeline-vcs-max-length 12)
-  (doom-modeline-env-version t)
-  (doom-modeline-irc-stylize 'identity)
-  (doom-modeline-github-timer nil)
-  (doom-modeline-gnus-timer nil))
-
-(defun doom-modeline-conditional-buffer-encoding ()
-  "We expect the encoding to be LF UTF-8, so only show the modeline when this is not the case"
-  (setq-local doom-modeline-buffer-encoding
-    (unless (and (memq (plist-get (coding-system-plist buffer-file-coding-system) :category)
-                                 '(coding-category-undecided coding-category-utf-8))
-                           (not (memq (coding-system-eol-type buffer-file-coding-system) '(1 2))))
-                t)))
-
-(add-hook 'after-change-major-mode-hook #'doom-modeline-conditional-buffer-encoding)
-#+end_src
-
-** Doom dashboard
-#+begin_src emacs-lisp
-  (setq fancy-splash-image
-        (concat doom-user-dir "splash/" "emacs.svg"))
-#+end_src
-
-** Keybinds
-#+begin_src emacs-lisp
-(map! :leader
-      (:prefix ("=" . "open config")
-       :desc "Hyprland"      "h" #'(lambda () (interactive) (find-file "~/.config/hypr/hypr.org"))
-       :desc "zshrc"         "z" #'(lambda () (interactive) (find-file "~/.zshrc"))
-       :desc "eww"           "e" #'(lambda () (interactive) (find-file "~/.config/eww/eww.org"))
-       :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
-       :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
-#+end_src
-
-** Evil mode
-
-#+begin_src emacs-lisp
-(evil-global-set-key 'motion "j" 'evil-next-visual-line)
-(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-#+end_src
-
-** Zone mode
-#+begin_src emacs-lisp
-(require 'zone)
-(require 'zone-words)
-(eval-after-load "zone"
-  '(unless (memq 'zone-words (append zone-programs nil))
-     (setq zone-programs (vconcat [zone-words]))))
-
-(zone-when-idle 600)
-#+end_src
-
-** Transpose Frame
-Rotates split
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! transpose-frame)
-#+end_src
-
-* Org mode
-** Base org config
-
-#+begin_src emacs-lisp
-(setq org-directory "~/org/")
-;; Turn on doom-modeline word count mode
-(defun enable-doom-modeline-word-count ()
-  (setq-local doom-modeline-enable-word-count t))
-
-(add-hook 'org-mode-hook #'enable-doom-modeline-word-count)
-
-(after! org
-  (setq org-log-done 'time)
-  (setq org-hide-emphasis-markers t)
-  (setq org-startup-with-inline-images t)
-  (setq
-   org-ellipsis " ▼ "
-   org-hide-emphasis-markers t
-   ;; org-superstar-headline-bullets-list '("⁙" "⁘" "⁖" "❋" "✸" "✹")
-   ;; org-superstar-headline-bullets-list '("⁖" "○" "◉" "●" "✸" "✿")
-   org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
-   )
-
-  ;; after org continues
-#+end_src
-
-** Fonts in Org
-#+begin_src emacs-lisp
-(dolist (face '((org-level-1 . 1.2)
-                (org-level-2 . 1.1)
-                ))
-  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
-(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-(set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch)
-(set-face-attribute 'line-number nil :inherit 'fixed-pitch)
-(set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
-#+end_src
-
-** Todo keywords
-#+begin_src emacs-lisp
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(d)" "DONE")
-        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")
-        (sequence "CLIENT(c)" "SCRIPTED(s)" "SENT")))
-
-(setq org-todo-keyword-faces '(
-                               ("IDEA" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
-                               ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold)) ; light blue
-                               ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold)) ; pink
-                               ("CLIENT" . (:foreground "#ffcc00" :bold t :weight bold)) ; yellow
-                               ("EDITED" . ( :foreground "gray65" :bold t :weight bold)) ; grey
-                               ("SENT" . ( :foreground "gray65" :bold t :weight bold)) ; grey
-                               ))
-#+end_src
-
-** Latex snippets
-
-Render =\omega= as $\omega$.
-
-#+begin_src emacs-lisp
-(setq org-pretty-entities t)
-#+end_src
-
-General latex settings.
-
-#+begin_src emacs-lisp
-(plist-put org-format-latex-options :scale 1)
-(setq org-highlight-latex-and-related '(latex))
-(plist-put org-format-latex-options :background "Transparent")
-#+end_src
-
-*** org-fragtog Auto LaTeX fragment preview
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-fragtog)
-#+end_src
-
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-fragtog-mode)
-#+end_src
-
-** Org Roam
-#+begin_src emacs-lisp
-(setq org-roam-directory "~/org/roam")
-(setq org-roam-capture-templates
-  '(("d" "default" plain
-     "%?"
-     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+startup: latexpreview\n")
-     :unnarrowed t)
-    ("m" "module" plain
-     ;; (file "<path to template>")
-     "\n* Module details\n\n- %^{Module code}\n- Semester: %^{Semester}\n\n* %?"
-     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
-     :unnarrowed t)
-    ("b" "book notes" plain
-     "\n* Source\n\n- Author: %^{Author}\n- Title: ${title}\n- Year: %^{Year}\n\n%?"
-     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+startup: latexpreview\n")
-     :unnarrowed t)
-  )
-)
-(setq org-roam-dailies-capture-templates
-  '(("d" "default" entry "* %<%H:%M>: %?"
-     :ifnew (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-  )
-)
-;; (org-roam-db-autosync-enable)
-#+end_src
-
-** Writeroom
-#+begin_src emacs-lisp
-;; Keep fonts in writeroom mode.
-;; (add-hook 'org-mode-hook #'buffer-face-mode)
-;; writeroom mode by default for org roam buffers.
-(setq +zen-text-scale 0.8)
-(setq writeroom-width 100)
-(setq writeroom-mode-line t)
-(add-hook 'org-mode-hook #'+zen/toggle t)
-;; Enable svg-tag-mode
-(add-hook 'org-mode-hook #'svg-tag-mode)
-;; after org ends
-)
-#+end_src
-
-** Org roam ui
-#+begin_src emacs-lisp :tangle packages.el
-(unpin! org-roam)
-(package! org-roam-ui)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! websocket
-    :after org-roam)
-
-(use-package! org-roam-ui
-    :after org-roam ;; or :after org
-;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-;;         a hookable mode anymore, you're advised to pick something yourself
-;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
-    :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
-
-#+end_src
-
-** SVG Tags
-
-Load our scripts for SVG Tags.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! svg-lib)
-(package! svg-tag-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-(use-package! svg-lib
-  :init (add-hook 'after-setting-font-hook (lambda () (setq svg-lib-style-default (svg-lib-style-compute-default)))))
-
-(load (concat doom-user-dir "scripts/" "svg-tags.el"))
-#+end_src
-
-** Notebook mode
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! notebook-mode :recipe (:local-repo "lisp/notebook"))
-#+end_src
-
-** Perfecting LaTeX
-
-Let's disable all of the default packages so we can customise it how /we/ want it.
-
-#+begin_src emacs-lisp
-(with-eval-after-load 'ox-latex
-(add-to-list 'org-latex-classes
-             '("org-plain-latex"
-               "\\documentclass{article}
-           [NO-DEFAULT-PACKAGES]
-           [PACKAGES]
-           [EXTRA]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-#+end_src
-
-*** Using minted for code highlighting
-
-#+begin_src emacs-lisp
-(setq org-latex-src-block-backend 'minted
-      org-latex-packages-alist '(("" "minted"))
-      org-latex-pdf-process
-      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-#+end_src
-
-** org-auto-tangle
-
-Add =#+auto_tangle: t= to the top of an org file to enable auto-tangle!
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! org-auto-tangle)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(use-package! org-auto-tangle
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode)
-  :config
-  (setq org-auto-tangle-default t)
-)
-#+end_src
-
-** ob-mermaid
-
-Needs ~mmdc~ available.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! ob-mermaid)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(after! ob-mermaid
-  :config
-  (setq ob-mermaid-cli-path "/usr/bin/mmdc"))
-
-(org-babel-do-load-languages
-    'org-babel-load-languages
-    '((mermaid . t)
-      (schema . t)))
-#+end_src
-
-*** mermaid-mode
-I also keep =mermaid-mode= in case I am working with a more complex mermaid diagram.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! mermaid-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-;; (after! mermaid-mode)
-#+end_src
-
-* General
-** Shell Shenanigans
-
+Shell settings.
 #+begin_src emacs-lisp
 (setq shell-file-name "/bin/bash")
 (setq-default shell-file-name "/bin/bash")
@@ -534,7 +56,16 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
 (require 'vterm)
 (setq vterm-shell "/usr/bin/nu")
 #+end_src
-
+Manipulate windows easier.
+#+begin_src emacs-lisp :tangle packages.el
+(package! transpose-frame)
+#+end_src
+Evil mode better scroll
+#+begin_src emacs-lisp
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+#+end_src
+Evil fine undo, which-key settings
 #+begin_src emacs-lisp
 (setq evil-want-fine-undo t
       truncate-string-ellipsis "…"
@@ -549,42 +80,62 @@ I also keep =mermaid-mode= in case I am working with a more complex mermaid diag
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
 #+end_src
-
-** Elcord
-#+begin_src emacs-lisp :tangle packages.el
-(package! elcord :pin "d0c9ace493d088bc70f7422705ff27dfcf162cca")
-#+end_src
-
+** Doom Fonts
 #+begin_src emacs-lisp
-(use-package! elcord
-  :commands elcord-mode
-  :config
-  (setq elcord-use-major-mode-as-main-icon t))
+(setq doom-font (font-spec :family "JetBrainsMono" :size 15 :weight 'regular)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
+      doom-big-font (font-spec :family "JetBrainsMono" :size 24))
+
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic))
 #+end_src
-
-** Auth Sources
-#+begin_src emacs-lisp :tangle yes
-(setq auth-sources '("~/.authinfo.gpg", "~/.authinfo", "~/.config/emacs/.local/state/authinfo.gpg"))
-#+end_src
-
-** Evil Tutor
-
-I will finish it one day...
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! evil-tutor)
-
-(package! evil-escape :disable t)
-#+end_src
-
-** HTML edit tags
-
+** Doom theme
 #+begin_src emacs-lisp
-(require 'sgml-mode)
-(add-hook 'web-mode-hook 'sgml-electric-tag-pair-mode)
+(setq doom-theme 'doom-palenight)
 #+end_src
+** Doom modeline
+#+begin_src emacs-lisp
+(after! doom-modeline
+  (display-battery-mode t))
+#+end_src
+** Doom Dashboard
+#+begin_src emacs-lisp
+(setq fancy-splash-image
+      (concat doom-user-dir "splash/" "i-am-doom-cropped.png"))
+#+end_src
+Remove existing menu.
+#+begin_src emacs-lisp
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+#+end_src
+Add custom footer.
+#+begin_src emacs-lisp
+(add-hook! '+doom-dashboard-functions :append
+  (insert "\n" (+doom-dashboard--center +doom-dashboard--width "Powered by Emacs!")))
+#+end_src
+Custom menu.
+#+begin_src emacs-lisp
+;; (add-to-list '+doom-dashboard-menu-sections
+;;              '("Add journal entry"
+;;                :icon (all-the-icons-octicon "calendar" :face 'doom-dashboard-menu-title)
+;;                :when (featurep! :lang org +journal)
+;;                :face (:inherit (doom-dashboard-menu-title bold))
+;;                :action org-journal-new-entry))
+#+end_src
+Fix Transparent image on transparent bg.
+#+begin_src emacs-lisp
+(defun my-load-doom-theme (frame)
+  (select-frame frame)
+  (load-theme doom-theme t))
 
-* Keymaps
+(if (daemonp)
+    (add-hook 'after-make-frame-functions #'my-load-doom-theme)
+  (load-theme doom-theme t))
+#+end_src
+** Keybinds
 
 Unbind [[kbd:][SPC w c]] as it is easy to misclick
 
@@ -607,88 +158,266 @@ Bind [[kbd:][SPC SPC]] to save buffer.
       :desc "Save buffer" "SPC" #'save-buffer)
 #+end_src
 
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("=" . "open config")
+       :desc "Hyprland"      "h" #'(lambda () (interactive) (find-file "~/.config/hypr/hypr.org"))
+       :desc "zshrc"         "z" #'(lambda () (interactive) (find-file "~/.zshrc"))
+       :desc "eww"           "e" #'(lambda () (interactive) (find-file "~/.config/eww/eww.org"))
+       :desc "nushell"       "n" #'(lambda () (interactive) (find-file "~/.config/nushell/nushell.org"))
+       :desc "foot"          "f" #'(lambda () (interactive) (find-file "~/.config/foot/foot.org"))))
+#+end_src
+* Org mode
+** General Settings
+Inline latex previews
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-fragtog)
+#+end_src
+
+#+begin_src emacs-lisp
+;; Basic org configuration
+(setq org-directory "~/org/")
+(setq org-log-done 'time)
+(setq org-hide-emphasis-markers t)
+(setq org-startup-with-inline-images t)
+(setq org-ellipsis " ▼ ")
+(setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
+
+;; Function to enable doom-modeline word count
+(defun enable-doom-modeline-word-count ()
+  (setq-local doom-modeline-enable-word-count t))
+
+(after! org
+;; Add hooks
+(add-hook 'org-mode-hook
+          (lambda ()
+            (enable-doom-modeline-word-count)
+            (org-fragtog-mode)
+            (svg-tag-mode)
+            (+zen/toggle t)))
+
+;; Font settings
+(dolist (face '((org-level-1 . 1.2)
+                (org-level-2 . 1.1)))
+  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+(set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+(set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+(set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch)
+
+;; Todo keywords
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(d)" "DONE")
+        (sequence "IDEA(i)" "SCRIPTED(s)" "RECORDED(r)" "EDITED")
+        (sequence "CLIENT(c)" "SCRIPTED(s)" "SENT")))
+
+(setq org-todo-keyword-faces
+      '(("IDEA" . (:foreground "#ffcc00" :bold t :weight bold))
+        ("SCRIPTED" . (:foreground "#b8e4f9" :bold t :weight bold))
+        ("RECORDED" . (:foreground "#ff84c9" :bold t :weight bold))
+        ("CLIENT" . (:foreground "#ffcc00" :bold t :weight bold))
+        ("EDITED" . (:foreground "gray65" :bold t :weight bold))
+        ("SENT" . (:foreground "gray65" :bold t :weight bold))))
+
+;; Latex settings
+(setq org-pretty-entities t)
+(plist-put org-format-latex-options :scale 1)
+(setq org-highlight-latex-and-related '(latex))
+(plist-put org-format-latex-options :background "Transparent")
+
+;; org-roam configuration
+(setq org-roam-directory "~/org/roam")
+(setq org-roam-capture-templates
+      '(("d" "default" plain "%?"
+         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                            "#+title: ${title}\n#+date: %U\n#+startup: latexpreview\n")
+         :unnarrowed t)
+        ("m" "module" plain
+         "\n* Module details\n\n- %^{Module code}\n- Semester: %^{Semester}\n\n* %?"
+         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                            "#+title: ${title}\n#+startup: latexpreview\n")
+         :unnarrowed t)
+        ("b" "book notes" plain
+         "\n* Source\n\n- Author: %^{Author}\n- Title: ${title}\n- Year: %^{Year}\n\n%?"
+         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                            "#+title: ${title}\n#+startup: latexpreview\n")
+         :unnarrowed t)))
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %<%H:%M>: %?"
+         :ifnew (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+
+;; writeroom configuration
+(setq +zen-text-scale 0.8)
+(setq writeroom-width 100)
+(setq writeroom-mode-line t)
+)
+#+end_src
+
+** Latex
+#+begin_src emacs-lisp
+;; Ensure packages are loaded only when needed
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("org-plain-latex"
+                 "\\documentclass{article}
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+;; Optimize LaTeX export with minted for code highlighting
+(setq org-latex-src-block-backend 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+;; Only load org-latex when needed
+(with-eval-after-load 'org
+  (require 'ox-latex))
+#+end_src
+
+** Cool SVG tags
+#+begin_src emacs-lisp :tangle packages.el
+(package! svg-lib)
+(package! svg-tag-mode)
+#+end_src
+SVG tags config
+#+begin_src emacs-lisp
+(require 'svg-tag-mode)
+(defconst date-re "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}")
+(defconst time-re "[0-9]\\{2\\}:[0-9]\\{2\\}")
+(defconst day-re "[A-Za-z]\\{3\\}")
+(defconst day-time-re (format "\\(%s\\)? ?\\(%s\\)?" day-re time-re))
+
+(defun svg-progress-percent (value)
+  (save-match-data
+   (svg-image (svg-lib-concat
+               (svg-lib-progress-bar  (/ (string-to-number value) 100.0)
+                                 nil :margin 0 :stroke 2 :radius 3 :padding 2 :width 11)
+               (svg-lib-tag (concat value "%")
+                            nil :stroke 0 :margin 0)) :ascent 'center)))
+
+(defun svg-progress-count (value)
+  (save-match-data
+    (let* ((seq (split-string value "/"))
+           (count (if (stringp (car seq))
+                      (float (string-to-number (car seq)))
+                    0))
+           (total (if (stringp (cadr seq))
+                      (float (string-to-number (cadr seq)))
+                    1000)))
+      (svg-image (svg-lib-concat
+                  (svg-lib-progress-bar (/ count total) nil
+                                        :margin 0 :stroke 2 :radius 3 :padding 2 :width 11)
+                  (svg-lib-tag value nil
+                               :stroke 0 :margin 0)) :ascent 'center))))
+
+(setq svg-tag-tags
+      `(
+        ;; Org tags
+        (":\\([A-Za-z0-9]+\\)" . ((lambda (tag) (svg-tag-make tag))))
+        (":\\([A-Za-z0-9]+[ \-]\\)" . ((lambda (tag) tag)))
+
+        ;; Task priority
+        ("\\[#[A-Z]\\]" . ( (lambda (tag)
+                              (svg-tag-make tag :face 'org-priority
+                                            :beg 2 :end -1 :margin 0))))
+
+        ;; TODO / DONE
+        ("TODO" . ((lambda (tag) (svg-tag-make "TODO" :face 'org-todo :inverse t :margin 0))))
+        ("DONE" . ((lambda (tag) (svg-tag-make "DONE" :face 'org-done :margin 0))))
+
+
+        ;; Citation of the form [cite:@Knuth:1984]
+        ("\\(\\[cite:@[A-Za-z]+:\\)" . ((lambda (tag)
+                                          (svg-tag-make tag
+                                                        :inverse t
+                                                        :beg 7 :end -1
+                                                        :crop-right t))))
+        ("\\[cite:@[A-Za-z]+:\\([0-9]+\\]\\)" . ((lambda (tag)
+                                                (svg-tag-make tag
+                                                              :end -1
+                                                              :crop-left t))))
+
+
+        ;; Active date (with or without day name, with or without time)
+        (,(format "\\(<%s>\\)" date-re) .
+         ((lambda (tag)
+            (svg-tag-make tag :beg 1 :end -1 :margin 0))))
+        (,(format "\\(<%s \\)%s>" date-re day-time-re) .
+         ((lambda (tag)
+            (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0))))
+        (,(format "<%s \\(%s>\\)" date-re day-time-re) .
+         ((lambda (tag)
+            (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0))))
+
+        ;; Inactive date  (with or without day name, with or without time)
+         (,(format "\\(\\[%s\\]\\)" date-re) .
+          ((lambda (tag)
+             (svg-tag-make tag :beg 1 :end -1 :margin 0 :face 'org-date))))
+         (,(format "\\(\\[%s \\)%s\\]" date-re day-time-re) .
+          ((lambda (tag)
+             (svg-tag-make tag :beg 1 :inverse nil :crop-right t :margin 0 :face 'org-date))))
+         (,(format "\\[%s \\(%s\\]\\)" date-re day-time-re) .
+          ((lambda (tag)
+             (svg-tag-make tag :end -1 :inverse t :crop-left t :margin 0 :face 'org-date))))
+
+        ;; ;; Progress
+        ("\\(\\[[0-9]\\{1,3\\}%\\]\\)" . ((lambda (tag)
+                                            (svg-progress-percent (substring tag 1 -2)))))
+        ("\\(\\[[0-9]+/[0-9]+\\]\\)" . ((lambda (tag)
+                                          (svg-progress-count (substring tag 1 -1)))))
+        ))
+#+end_src
+** Org roam
+#+begin_src emacs-lisp :tangle packages.el
+(unpin! org-roam)
+(package! org-roam-ui)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+end_src
 * LSP
 ** General
-*** Inlay hints
 #+begin_src emacs-lisp
 (after! lsp-mode
   (setq lsp-inlay-hint-enable t
         lsp-inlay-hints-mode t))
 #+end_src
-
-** Typescript
-
-Temporarily unpin =lsp= as =ts-ls= has breaking changes
-#+begin_src emacs-lisp :tangle packages.el
-;; (unpin! lsp-mode)
+HTML tag pair editing.
+#+begin_src emacs-lisp
+(require 'sgml-mode)
+(add-hook 'web-mode-hook 'sgml-electric-tag-pair-mode)
 #+end_src
-
-** Svelte
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! svelte-mode)
-#+end_src
-
-** Prisma
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
-#+end_src
-
-** Prettier
-
-Have this installed, just in case I have a project that needs it.
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! prettier)
-#+end_src
-
-** Python
-Fix poetry bug
-
+Poetry + pyenv bug fix.
 #+begin_src emacs-lisp
 (after! poetry
   (remove-hook 'python-mode-hook #'poetry-tracking-mode)
   (add-hook 'python-mode-hook 'poetry-track-virtualenv))
 #+end_src
-
-** Ruby - ERB
-
-#+begin_src emacs-lisp
-(after! lsp
-  (add-to-list 'lsp-language-id-configuration '(".*\\.html\\.erb$" . "html"))
-)
-#+end_src
-
-* LLM stuff
-** GPTel
+** Prisma
 #+begin_src emacs-lisp :tangle packages.el
-(package! gptel)
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(use-package! gptel
-  :config
-  (setq gptel-default-mode 'org-mode)
-  )
-(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
-(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
-#+end_src
-
-** Github copilot
-
-#+begin_src emacs-lisp :tangle packages.el
-(package! copilot
-  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-;; accept completion from copilot and fallback to company
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+(package! prisma-mode :recipe (:host github :repo "pimeys/emacs-prisma-mode" :branch "main"))
 #+end_src
