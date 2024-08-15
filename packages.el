@@ -2,6 +2,8 @@
 
 (package! org-fragtog)
 
+(package! org-auto-tangle)
+
 (package! svg-lib)
 (package! svg-tag-mode)
 

@@ -11,10 +11,12 @@
   - [[#doom-theme][Doom theme]]
   - [[#doom-modeline][Doom modeline]]
   - [[#doom-dashboard][Doom Dashboard]]
+  - [[#corfu-completion][Corfu Completion]]
   - [[#keybinds][Keybinds]]
 - [[#org-mode][Org mode]]
   - [[#general-settings][General Settings]]
   - [[#latex][Latex]]
+  - [[#org-auto-tangle][org-auto-tangle]]
   - [[#cool-svg-tags][Cool SVG tags]]
   - [[#org-roam][Org roam]]
 - [[#lsp][LSP]]
@@ -100,7 +102,8 @@ Evil fine undo, which-key settings
 ** Doom modeline
 #+begin_src emacs-lisp
 (after! doom-modeline
-  (display-battery-mode t))
+  (display-battery-mode t)
+  (setq doom-modeline-major-mode-icon t))
 #+end_src
 ** Doom Dashboard
 #+begin_src emacs-lisp
@@ -275,17 +278,36 @@ Inline latex previews
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
+(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+      TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view"))
+      TeX-source-correlate-start-server t)
+
 ;; Optimize LaTeX export with minted for code highlighting
 (setq org-latex-src-block-backend 'minted
       org-latex-packages-alist '(("" "minted"))
       org-latex-pdf-process
-      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory build %f"))
+
+(add-hook 'pdf-view-mode-hook 'auto-revert-mode)
 
 ;; Only load org-latex when needed
 (with-eval-after-load 'org
   (require 'ox-latex))
+#+end_src
+
+** org-auto-tangle
+Add =#+auto_tangle: t= to the top of an org file to enable auto-tangle!
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-auto-tangle)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t)
+)
 #+end_src
 
 ** Cool SVG tags
