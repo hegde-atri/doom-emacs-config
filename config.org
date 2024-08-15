@@ -138,6 +138,14 @@ Fix Transparent image on transparent bg.
     (add-hook 'after-make-frame-functions #'my-load-doom-theme)
   (load-theme doom-theme t))
 #+end_src
+** Corfu Completion
+Use [[kbd:][RET]] to accept completion.
+
+#+begin_src emacs-lisp
+(setq +corfu-want-ret-to-confirm t)
+(setq corfu-preselect 'first)
+#+end_src
+
 ** Keybinds
 
 Unbind [[kbd:][SPC w c]] as it is easy to misclick
