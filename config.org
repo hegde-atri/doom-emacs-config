@@ -51,12 +51,12 @@ Scroll off settings.
 #+end_src
 Shell settings.
 #+begin_src emacs-lisp
-(setq shell-file-name "/bin/bash")
-(setq-default shell-file-name "/bin/bash")
-(setenv "SHELL" shell-file-name)
+;; (setq shell-file-name "/bin/bash")
+;; (setq-default shell-file-name "/bin/bash")
+;; (setenv "SHELL" shell-file-name)
 
-(require 'vterm)
-(setq vterm-shell "/usr/bin/nu")
+;; (require 'vterm)
+;; (setq vterm-shell "/usr/bin/nu")
 #+end_src
 Manipulate windows easier.
 #+begin_src emacs-lisp :tangle packages.el
