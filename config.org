@@ -286,6 +286,16 @@ Inline latex previews
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("report"
+                 "\\documentclass{report}"
+                 ("\\chapter{%s}" . "\\section*{%s}")
+                 ("\\section{%s}" . "\\subsection*{%s}")
+                 ("\\subsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\paragraph*{%s}")
+                 ("\\paragraph{%s}" . "\\subparagraph*{%s}"))))
+
 (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
       TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view"))
       TeX-source-correlate-start-server t)
