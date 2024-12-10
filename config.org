@@ -204,7 +204,7 @@ Inline latex previews
           (lambda ()
             (enable-doom-modeline-word-count)
             (org-fragtog-mode)
-            (svg-tag-mode)
+            ;; (svg-tag-mode)
             (+zen/toggle t)))
 
 ;; Font settings
