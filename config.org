@@ -84,9 +84,9 @@ Evil fine undo, which-key settings
 #+end_src
 ** Doom Fonts
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JetBrainsMono" :size 15 :weight 'regular)
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'regular)
       doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 12)
-      doom-big-font (font-spec :family "JetBrainsMono" :size 24))
+      doom-big-font (font-spec :family "JetBrains Mono" :size 24))
 
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -97,7 +97,8 @@ Evil fine undo, which-key settings
 #+end_src
 ** Doom theme
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-palenight)
+;; (setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-rose-pine-dawn)
 #+end_src
 ** Doom modeline
 #+begin_src emacs-lisp
