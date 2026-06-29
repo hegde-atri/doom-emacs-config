@@ -110,10 +110,27 @@
            :gi "TAB" #'corfu-insert
            :gi [tab] #'corfu-insert))
 
-(after! eglot
-  (add-to-list 'eglot-server-programs
-              '((rust-ts-mode rust-mode) .
-                ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+(after! lsp-rust
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+
+(add-load-path! "vendor/crates.el")
+(require 'crates)
+
+(add-to-list 'auto-mode-alist '("/Cargo\\.toml\\'" . conf-toml-mode))
+
+(defun +doom-enable-crates-mode-maybe ()
+  (when (and buffer-file-name
+             (string= (file-name-nondirectory buffer-file-name) "Cargo.toml"))
+    (crates-mode 1)))
+
+(add-hook 'find-file-hook #'+doom-enable-crates-mode-maybe)
+(add-hook 'conf-toml-mode-hook #'+doom-enable-crates-mode-maybe)
+(add-hook 'toml-ts-mode-hook #'+doom-enable-crates-mode-maybe)
+(add-hook 'toml-mode-hook #'+doom-enable-crates-mode-maybe)
+
+(dolist (buffer (buffer-list))
+  (with-current-buffer buffer
+    (+doom-enable-crates-mode-maybe)))
 
 (with-eval-after-load 'python
   (set-eglot-client! '(python-mode python-ts-mode) '("ty" "server")))
