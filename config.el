@@ -27,8 +27,8 @@
 ;; (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'medium)
 ;;       doom-variable-pitch-font (font-spec :family "JetBrains Mono" :sie 15 :weight 'medium))
 ;; Terminess Mono
-(setq doom-font (font-spec :family "Terminess Nerd Font Mono" :size 16 :weight 'medium)
-      doom-variable-pitch-font (font-spec :family "Terminess Nerd Font Mono" :size 16 :weight 'medium))
+(setq doom-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium)
+      doom-variable-pitch-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium))
 
 (when (display-graphic-p)
   (doom-big-font-mode t))
