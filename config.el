@@ -2,14 +2,19 @@
 (setq user-full-name "Atri Hegde"
       user-mail-address "atri@example.com")
 
-(use-package! super-save
-  :defer t
+(after! super-save
   :init
-  (super-save-mode +1)
   (setq super-save-auto-save-when-idle t)
   (setq super-save-idle-duration 2)
+  (setq super-save-silent t)
   ;; But not for remote files
-  (setq super-save-remote-files nil))
+  (setq super-save-remote-files nil)
+  :config
+  (super-save-mode +1))
+
+;; super save doesn't work without this...
+(after! org
+  (super-save-mode +1))
 
 (map! :leader
       :desc "Save Buffer" "SPC" #'save-buffer)
