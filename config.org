@@ -33,9 +33,15 @@ Auto save all buffers on loss of focus or after 2 seconds idle.
 #+end_src
 
 Save files quicker/easier
+
 #+begin_src emacs-lisp
 (map! :leader
       :desc "Save Buffer" "SPC" #'save-buffer)
+#+end_src
+
+Tab size
+#+begin_src emacs-lisp
+(setq-default tab-width 2)
 #+end_src
 
 * User Interface
@@ -54,7 +60,8 @@ Save files quicker/easier
 ** Scale
 Turn on big font mode for my HiDPI display
 #+begin_src emacs-lisp
-(doom-big-font-mode t)
+(when (display-graphic-p)
+  (doom-big-font-mode t))
 #+end_src
 
 ** Lines
@@ -64,12 +71,25 @@ Custom scroll margin for evil mode.
 (setq-default scroll-margin 7)
 
 ;; Apart from these modes which should have a scroll margin of 0
-(dolist (mode '(Info-mode term-mode eshell-mode shell-mode erc-mode vterm-mode))
+(dolist (mode '(Info-mode term-mode eshell-mode shell-mode erc-mode vterm-mode comint-mode))
   (add-hook (intern (format "%s-hook" mode))
             (lambda () (setq-local scroll-margin 0))))
 
 ;; Use relative line numbers
 (setq display-line-numbers-type 'relative)
+#+end_src
+
+Make evil mode scroll to the next visual line.
+#+begin_src emacs-lisp
+(evil-global-set-key 'motion "j" 'evil-next-visual-line)
+(evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+(after! doom-modeline
+  (display-battery-mode t)
+  ;; Also have the file icon
+  (setq doom-modeline-major-mode-icon t))
 #+end_src
 
 * Org-mode
