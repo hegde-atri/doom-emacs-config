@@ -1,6 +1,7 @@
 ;;; $DOOMDIR/packages.el -*- lexical-binding: t; no-byte-compile: t -*-
 (package! super-save)
 
+(package! org-roam-ui)
 
 ;; To install a package:
 ;;

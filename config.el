@@ -91,7 +91,31 @@
 (setq writeroom-width 75)
 (setq writeroom-mode-line t)
 
-;; Only works with LSP not EGLOT
-;; (map! :leader
-;;       (:prefix ("b" . "buffer")
-;;                :desc "Format Buffer" "f" #'lsp-format-buffer))
+(use-package! websocket
+  :after org-roam)
+(use-package! org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t)
+  (setq org-roam-ui-follow t)
+  (setq org-roam-ui-update-on-save t)
+  (setq org-roam-ui-open-on-start t))
+
+;; (after! corfu
+;;   (setq corfu-preselect 'first))
+;; (setq +corfu-want-ret-to-confirm t)
+(after! corfu
+     (setq corfu-preselect 'first)
+     (map! :map corfu-map
+           :gi "TAB" #'corfu-insert
+           :gi [tab] #'corfu-insert))
+
+(after! eglot
+  (add-to-list 'eglot-server-programs
+              '((rust-ts-mode rust-mode) .
+                ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
+
+(with-eval-after-load 'python
+  (set-eglot-client! '(python-mode python-ts-mode) '("ty" "server")))
+(with-eval-after-load 'python
+  (set-formatter! 'ruff :modes '(python-mode python-ts-mode)))
