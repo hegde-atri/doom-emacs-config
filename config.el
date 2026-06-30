@@ -21,19 +21,19 @@
       :desc "Save Buffer" "SPC" #'save-buffer)
 
 ;; Tab size
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 
-(setq doom-theme 'doom-palenight)
+(setq doom-theme 'doom-dracula)
 
 ;; JetBrains Mono
-(setq doom-font (font-spec :family "JetBrains Mono" :size 17 :weight 'medium)
-      doom-variable-pitch-font (font-spec :family "JetBrains Mono" :sie 17 :weight 'medium))
+;; (setq doom-font (font-spec :family "JetBrains Mono" :size 17 :weight 'medium)
+;;       doom-variable-pitch-font (font-spec :family "JetBrains Mono" :sie 17 :weight 'medium))
 ;; Terminess Mono
-;; (setq doom-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium)
-;;       doom-variable-pitch-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium))
+(setq doom-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium)
+      doom-variable-pitch-font (font-spec :family "Terminess Nerd Font Mono" :size 17 :weight 'medium))
 
-(when (display-graphic-p)
-  (doom-big-font-mode t))
+;; (when (display-graphic-p)
+;;   (doom-big-font-mode t))
 
 ;; Default global scroll margin
 (setq-default scroll-margin 7)
