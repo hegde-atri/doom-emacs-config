@@ -347,10 +347,24 @@ Use [[kbd:][RET]] to accept completion
 #+end_src
 
 ** Rust
+Use 4 spaces for tabs.
+#+begin_src emacs-lisp
+(after! rustic
+  (setq-default rustic-indent-offset 4))
+#+end_src
+
 Enable clippy
 #+begin_src emacs-lisp
-(after! lsp-rust
-  (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+;; LSP
+;; (after! lsp-rust
+;;   (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+
+;; EGLOT
+(after! eglot
+  (setq-default eglot-workspace-configuration
+                '(:rust-analyzer
+                  (:check
+                   (:command "clippy")))))
 #+end_src
 
 Show latest crate versions in Cargo.toml

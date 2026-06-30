@@ -207,8 +207,19 @@
            :gi "TAB" #'corfu-insert
            :gi [tab] #'corfu-insert))
 
-(after! lsp-rust
-  (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+(after! rustic
+  (setq-default rustic-indent-offset 4))
+
+;; LSP
+;; (after! lsp-rust
+;;   (setq lsp-rust-analyzer-cargo-watch-command "clippy"))
+
+;; EGLOT
+(after! eglot
+  (setq-default eglot-workspace-configuration
+                '(:rust-analyzer
+                  (:check
+                   (:command "clippy")))))
 
 (add-load-path! "vendor/crates.el")
 (require 'crates)
