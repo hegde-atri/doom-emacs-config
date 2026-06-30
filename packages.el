@@ -1,6 +1,8 @@
 ;;; $DOOMDIR/packages.el -*- lexical-binding: t; no-byte-compile: t -*-
 (package! super-save)
 
+(package! org-fragtog)
+
 (package! mermaid-mode)
 (package! ob-mermaid)
 

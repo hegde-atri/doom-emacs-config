@@ -58,6 +58,110 @@
 
 (setq org-agenda-files '("~/org/roam/agenda/"))
 
+(setq org-log-done 'time)
+(setq org-hide-emphasis-markers t)
+(setq org-startup-with-inline-images t)
+(setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
+
+(after! org
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local doom-modeline-enable-word-count t))))
+
+(after! org
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (face-remap-add-relative 'default :family "Overpass")))
+  (set-face-attribute 'org-block nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-block-begin-line nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-block-end-line nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+
+(after! org
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.0)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.0)
+                  (org-level-6 . 1.0)
+                  (org-level-7 . 1.0)
+                  (org-level-8 . 1.0)))
+    (set-face-attribute (car face) nil
+                        :font "Iosevka Aile"
+                        :weight 'medium
+                        :height (cdr face)))
+  (set-face-attribute 'org-document-title nil
+                      :font "Iosevka Aile"
+                      :weight 'bold
+                      :height 1.3))
+
+(after! org
+  (add-hook 'org-mode-hook
+            #'org-fragtog-mode))
+
+(after! org
+  (plist-put org-format-latex-options :scale 0.85)
+  (setq org-highlight-latex-and-related '(latex))
+  (plist-put org-format-latex-options :background "Transparent"))
+
+(after! org
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("org-plain-latex"
+                   "\\documentclass{article}
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("report"
+                   "\\documentclass{report}"
+                   ("\\chapter{%s}" . "\\section*{%s}")
+                   ("\\section{%s}" . "\\subsection*{%s}")
+                   ("\\subsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\paragraph*{%s}")
+                   ("\\paragraph{%s}" . "\\subparagraph*{%s}"))))
+
+  ;; Use PDF Tools for AUCTeX previews and keep rendered PDFs current.
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view"))
+        TeX-source-correlate-start-server t)
+  (add-hook 'pdf-view-mode-hook #'auto-revert-mode)
+
+  ;; Use minted for source blocks. Requires pygments and shell escape support.
+  (setq org-latex-src-block-backend 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory build %f"))
+
+  (require 'ox-latex))
+
+(after! org-roam
+  (setq org-roam-directory (file-truename "~/org/roam/")))
+
+(after! org-roam
+  (setq org-roam-dailies-directory "daily/"
+        org-roam-dailies-capture-templates
+        '(("d" "default" entry "* %<%H:%M>: %?"
+           :ifnew (file+head "%<%Y-%m-%d>.org"
+                             "#+title: %<%Y-%m-%d>\n")))))
+
 (setq org-modern-table-vertical 1)
 (setq org-modern-table t)
 

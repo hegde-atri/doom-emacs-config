@@ -1,6 +1,6 @@
 #+title: Doom Emacs Config
 #+author: Atri Hegde
-#+startup: overview
+#+startup: overview latexpreview
 
 * Table of Contents :TOC:
 - [[#general][General]]
@@ -15,7 +15,10 @@
 - [[#org-mode][Org-mode]]
   - [[#general-1][General]]
   - [[#agenda][Agenda]]
-  - [[#heading-variable-font-sizes][Heading Variable font sizes]]
+  - [[#custom-font-faces][Custom font faces]]
+  - [[#variable-font-sizes][Variable font sizes]]
+  - [[#latex][LaTeX]]
+  - [[#org-roam][Org Roam]]
   - [[#tables][Tables]]
   - [[#zen-mode][Zen Mode]]
   - [[#mermaid-diagrams][Mermaid diagrams]]
@@ -131,7 +134,146 @@ Make evil mode scroll to the next visual line.
 (setq org-agenda-files '("~/org/roam/agenda/"))
 #+end_src
 
-** Heading Variable font sizes
+#+begin_src emacs-lisp
+(setq org-log-done 'time)
+(setq org-hide-emphasis-markers t)
+(setq org-startup-with-inline-images t)
+(setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
+
+(after! org
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local doom-modeline-enable-word-count t))))
+#+end_src
+
+** Custom font faces
+Keep code-like Org elements aligned by forcing them back to fixed pitch, even when prose uses a variable-pitch face.
+#+begin_src emacs-lisp
+(after! org
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (face-remap-add-relative 'default :family "Overpass")))
+  (set-face-attribute 'org-block nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-block-begin-line nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-block-end-line nil :family "Terminess Nerd Font Mono")
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number nil :inherit 'fixed-pitch)
+  (set-face-attribute 'line-number-current-line nil :inherit 'fixed-pitch))
+#+end_src
+
+** Variable font sizes
+Use a proportional font for Org headings and make higher-level headings stand out without changing the body text size.
+#+begin_src emacs-lisp
+(after! org
+  (dolist (face '((org-level-1 . 1.2)
+                  (org-level-2 . 1.1)
+                  (org-level-3 . 1.0)
+                  (org-level-4 . 1.0)
+                  (org-level-5 . 1.0)
+                  (org-level-6 . 1.0)
+                  (org-level-7 . 1.0)
+                  (org-level-8 . 1.0)))
+    (set-face-attribute (car face) nil
+                        :font "Iosevka Aile"
+                        :weight 'medium
+                        :height (cdr face)))
+  (set-face-attribute 'org-document-title nil
+                      :font "Iosevka Aile"
+                      :weight 'bold
+                      :height 1.3))
+#+end_src
+
+** LaTeX
+*** Inline $\LaTeX$ previews
+
+#+begin_src emacs-lisp :tangle packages.el
+(package! org-fragtog)
+#+end_src
+
+#+begin_src emacs-lisp
+(after! org
+  (add-hook 'org-mode-hook
+            #'org-fragtog-mode))
+#+end_src
+
+Adjust size of latex previews.
+#+begin_src emacs-lisp
+(after! org
+  (plist-put org-format-latex-options :scale 0.85)
+  (setq org-highlight-latex-and-related '(latex))
+  (plist-put org-format-latex-options :background "Transparent"))
+#+end_src
+
+*** LaTeX export
+Keep LaTeX export setup behind Org so it is not loaded during early startup.
+The entries in =org-latex-classes= define named export targets for Org's
+=#+latex_class:= option. =org-plain-latex= gives a minimal article class that
+keeps Org's default package list out of the generated preamble, while =report=
+maps Org heading levels onto the LaTeX sectioning commands used by the report
+document class.
+#+begin_src emacs-lisp
+(after! org
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("org-plain-latex"
+                   "\\documentclass{article}
+[NO-DEFAULT-PACKAGES]
+[PACKAGES]
+[EXTRA]"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("report"
+                   "\\documentclass{report}"
+                   ("\\chapter{%s}" . "\\section*{%s}")
+                   ("\\section{%s}" . "\\subsection*{%s}")
+                   ("\\subsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\paragraph*{%s}")
+                   ("\\paragraph{%s}" . "\\subparagraph*{%s}"))))
+
+  ;; Use PDF Tools for AUCTeX previews and keep rendered PDFs current.
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" "TeX-pdf-tools-sync-view"))
+        TeX-source-correlate-start-server t)
+  (add-hook 'pdf-view-mode-hook #'auto-revert-mode)
+
+  ;; Use minted for source blocks. Requires pygments and shell escape support.
+  (setq org-latex-src-block-backend 'minted
+        org-latex-packages-alist '(("" "minted"))
+        org-latex-pdf-process
+        '("pdflatex -shell-escape -interaction nonstopmode -output-directory build %f"))
+
+  (require 'ox-latex))
+#+end_src
+
+** Org Roam
+#+begin_src emacs-lisp
+(after! org-roam
+  (setq org-roam-directory (file-truename "~/org/roam/")))
+#+end_src
+
+*** Org Roam Daily
+#+begin_src emacs-lisp
+(after! org-roam
+  (setq org-roam-dailies-directory "daily/"
+        org-roam-dailies-capture-templates
+        '(("d" "default" entry "* %<%H:%M>: %?"
+           :ifnew (file+head "%<%Y-%m-%d>.org"
+                             "#+title: %<%Y-%m-%d>\n")))))
+#+end_src
 
 ** Tables
 #+begin_src emacs-lisp
