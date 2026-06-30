@@ -283,9 +283,11 @@ document class.
 
 ** Zen Mode
 #+begin_src emacs-lisp
-(setq writeroom-width 75)
+(setq +zen-text-scale 0.9)
+(setq writeroom-width 100)
 (setq writeroom-mode-line t)
 #+end_src
+
 ** Mermaid diagrams
 Get the mermaid packages and intialise them so that I can create mermaid files in org mode.
 #+begin_src emacs-lisp :tangle packages.el

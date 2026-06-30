@@ -165,7 +165,8 @@
 (setq org-modern-table-vertical 1)
 (setq org-modern-table t)
 
-(setq writeroom-width 75)
+(setq +zen-text-scale 0.9)
+(setq writeroom-width 100)
 (setq writeroom-mode-line t)
 
 (use-package! mermaid-mode
