@@ -129,21 +129,21 @@ Make evil mode scroll to the next visual line.
 (setq org-directory "~/org/")
 #+end_src
 
-** Agenda
-#+begin_src emacs-lisp
-(setq org-agenda-files '("~/org/roam/agenda/"))
-#+end_src
-
 #+begin_src emacs-lisp
 (setq org-log-done 'time)
 (setq org-hide-emphasis-markers t)
 (setq org-startup-with-inline-images t)
-(setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
+;; (setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
 
 (after! org
   (add-hook 'org-mode-hook
             (lambda ()
               (setq-local doom-modeline-enable-word-count t))))
+#+end_src
+
+** Agenda
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/org/roam/agenda/"))
 #+end_src
 
 ** Custom font faces

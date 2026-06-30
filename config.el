@@ -56,17 +56,17 @@
 
 (setq org-directory "~/org/")
 
-(setq org-agenda-files '("~/org/roam/agenda/"))
-
 (setq org-log-done 'time)
 (setq org-hide-emphasis-markers t)
 (setq org-startup-with-inline-images t)
-(setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
+;; (setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆"))
 
 (after! org
   (add-hook 'org-mode-hook
             (lambda ()
               (setq-local doom-modeline-enable-word-count t))))
+
+(setq org-agenda-files '("~/org/roam/agenda/"))
 
 (after! org
   (add-hook 'org-mode-hook
