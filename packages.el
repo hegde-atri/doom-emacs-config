@@ -1,6 +1,9 @@
 ;;; $DOOMDIR/packages.el -*- lexical-binding: t; no-byte-compile: t -*-
 (package! super-save)
 
+(package! mermaid-mode)
+(package! ob-mermaid)
+
 (package! org-roam-ui)
 
 ;; To install a package:

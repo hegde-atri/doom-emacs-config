@@ -62,6 +62,25 @@
 (setq writeroom-width 75)
 (setq writeroom-mode-line t)
 
+(use-package! mermaid-mode
+  :mode "\\.mmd\\'"
+  :config
+  (setq mermaid-mmdc-location (or (executable-find "mmdc") "mmdc")
+        mermaid-output-format ".svg"))
+
+(use-package! ob-mermaid
+  :after org
+  :config
+  (setq ob-mermaid-cli-path (or (executable-find "mmdc") "mmdc"))
+  (setq org-babel-default-header-args:mermaid
+        '((:results . "file graphics")
+          (:exports . "results")))
+  (add-to-list 'org-src-lang-modes '("mermaid" . mermaid))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages
+           '((mermaid . t)))))
+
 (use-package! websocket
   :after org-roam)
 (use-package! org-roam-ui

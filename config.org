@@ -1,4 +1,6 @@
 #+title: Doom Emacs Config
+#+author: Atri Hegde
+#+startup: overview
 
 * Table of Contents :TOC:
 - [[#general][General]]
@@ -10,9 +12,11 @@
   - [[#lines][Lines]]
   - [[#modeline][Modeline]]
 - [[#org-mode][Org-mode]]
+  - [[#general-1][General]]
   - [[#heading-variable-font-sizes][Heading Variable font sizes]]
   - [[#tables][Tables]]
   - [[#zen-mode][Zen Mode]]
+  - [[#mermaid-diagrams][Mermaid diagrams]]
   - [[#org-roam-ui][Org Roam UI]]
 - [[#coding][Coding]]
   - [[#corfu---completion][Corfu - Completion]]
@@ -116,6 +120,7 @@ Make evil mode scroll to the next visual line.
 #+end_src
 
 * Org-mode
+** General
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
 #+end_src
@@ -133,6 +138,34 @@ Make evil mode scroll to the next visual line.
 (setq writeroom-width 75)
 (setq writeroom-mode-line t)
 #+end_src
+** Mermaid diagrams
+Get the mermaid packages and intialise them so that I can create mermaid files in org mode.
+#+begin_src emacs-lisp :tangle packages.el
+(package! mermaid-mode)
+(package! ob-mermaid)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! mermaid-mode
+  :mode "\\.mmd\\'"
+  :config
+  (setq mermaid-mmdc-location (or (executable-find "mmdc") "mmdc")
+        mermaid-output-format ".svg"))
+
+(use-package! ob-mermaid
+  :after org
+  :config
+  (setq ob-mermaid-cli-path (or (executable-find "mmdc") "mmdc"))
+  (setq org-babel-default-header-args:mermaid
+        '((:results . "file graphics")
+          (:exports . "results")))
+  (add-to-list 'org-src-lang-modes '("mermaid" . mermaid))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages
+           '((mermaid . t)))))
+#+end_src
+
 ** Org Roam UI
 #+begin_src emacs-lisp :tangle packages.el
 (package! org-roam-ui)
