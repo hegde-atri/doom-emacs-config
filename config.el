@@ -56,6 +56,8 @@
 
 (setq org-directory "~/org/")
 
+(setq org-agenda-files '("~/org/roam/agenda/"))
+
 (setq org-modern-table-vertical 1)
 (setq org-modern-table t)
 

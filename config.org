@@ -14,6 +14,7 @@
   - [[#modeline][Modeline]]
 - [[#org-mode][Org-mode]]
   - [[#general-1][General]]
+  - [[#agenda][Agenda]]
   - [[#heading-variable-font-sizes][Heading Variable font sizes]]
   - [[#tables][Tables]]
   - [[#zen-mode][Zen Mode]]
@@ -123,6 +124,11 @@ Make evil mode scroll to the next visual line.
 ** General
 #+begin_src emacs-lisp
 (setq org-directory "~/org/")
+#+end_src
+
+** Agenda
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/org/roam/agenda/"))
 #+end_src
 
 ** Heading Variable font sizes
